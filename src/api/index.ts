@@ -1,7 +1,11 @@
-const PORT = 3001;
+const PORT = process.env.PORT;
 const BASE_URL = `http://localhost:${PORT}`;
 
-async function getSampleNames() {
+interface SampleObject {
+  [key: string]: File[];
+}
+
+async function getSampleNames(): Promise<SampleObject> {
   const sampleNames = await fetch(`${BASE_URL}/samples`).then((res) => {
     console.log(res);
     return res.json();

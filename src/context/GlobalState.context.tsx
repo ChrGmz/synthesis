@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 const StateContext = createContext(null);
 StateContext.displayName = 'StateContext';
 
-function StateProvider({ children }) {
+function StateProvider({ children }: {[key: string] : [value: any]}) {
   const [state, dispatch] = useReducer(stateReducer, {
     Tone: Tone,
     master: {
@@ -22,7 +22,8 @@ function StateProvider({ children }) {
       distortion: new Tone.Distortion(0.8),
       phaser: new Tone.Phaser({
         frequency: 1,
-        octaves: '1',
+        // changed this to to number as Type Definition states octaves should be a number
+        octaves: 1,
         baseFrequency: 100,
       }),
       compressor: new Tone.Compressor(-30, 3),
