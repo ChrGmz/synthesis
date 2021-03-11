@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { instrumentComponents } from '@instruments';
+import { instrumentComponents } from './instruments';
 import TransportPosition from '@panels/TransportPosition/TransportPosition';
 
 import styles from './Playground.module.scss';

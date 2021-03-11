@@ -1,28 +1,10 @@
 import { useReducer } from 'react';
 import * as Tone from 'tone';
-import stateReducer, { IInstrument } from './stateReducer';
+import stateReducer from './stateReducer';
 
-import effectsList from '../components/effects';
+import effectsList from '@effects';
 
-interface IState {
-  Tone: typeof Tone,
-  master: IMaster[],
-  instruments: IInstrument,
-  activeInstrumentId: null,
-  maxBars: number,
-  effectsList: string[],
-  categoryErrorFlag: boolean,
-}
-
-interface IMaster {
-  effects: string[],
-  volume: number,
-  bpm: number,
-  metronome: boolean,
-  metronomeVol: number,
-}
-
-const keys: string[] = Object.keys(effectsList);
+const keys = Object.keys(effectsList);
 
 function useGlobalState() {
   const [state, dispatch] = useReducer(stateReducer, {
@@ -44,4 +26,4 @@ function useGlobalState() {
   return [state, dispatch];
 }
 
-export { useGlobalState, IState };
+export { useGlobalState };

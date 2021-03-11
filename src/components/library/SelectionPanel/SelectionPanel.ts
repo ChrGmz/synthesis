@@ -29,6 +29,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
       const _subCategories = Object.keys(res);
 
       setInstruments([...instruments, ..._samples]);
+      
       setSubCategories([...subCategories, ..._subCategories]);
     });
     //eslint-disable-next-line

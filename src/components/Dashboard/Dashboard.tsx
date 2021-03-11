@@ -1,11 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useGlobalState } from '@context/GlobalState';
-
-import Playground from '@components/Playground/Playground';
-import MasterPanel from '@components/MasterPanel/MasterPanel';
-import SelectionPanel from '@library/SelectionPanel/SelectionPanel';
-
-import InstrumentPanel from '@components/InstrumentPanel/InstrumentPanel';
+import { useState, useCallback, useEffect } from 'react';
+import { useGlobalState } from '../../context/GlobalState';
+import InstrumentPanel from '../InstrumentPanel/InstrumentPanel';
+import SelectionPanel from '../library/SelectionPanel/SelectionPanel';
+import MasterPanel from '../MasterPanel/MasterPanel';
 
 import styles from './Dashboard.module.scss';
 
@@ -37,7 +34,7 @@ function Dashboard() {
   }, [Tone.Master, volume]);
 
   // Play/Pause master
-  const handleTransport = useCallback(() => {
+  const handleTransport: () => void = useCallback(() => {
     if (playState === 'started') Tone.Transport.stop();
     else Tone.Transport.start();
 
@@ -48,11 +45,13 @@ function Dashboard() {
     activeInstrumentId && getActiveInstrument(instruments, activeInstrumentId);
 
   const handleKeyPress = useCallback(
-    (event) => {
-      const { which } = event;
+    (event: KeyboardEvent) => {
+      // changed 'which' to 'key' on lines 48 and 51 as ts stated KeyboardEvent.which is deprecated
+      const { key } = event;
 
-      switch (which) {
-        case 32: {
+      // changed 
+      switch (key) {
+        case ' ': {
           event.preventDefault();
           handleTransport();
           return;
