@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import stateReducer,  {IInstrument} from './stateReducer';
+import stateReducer from './stateReducer';
 import { IState } from './GlobalState';
 import { IAction } from './stateReducer';
 import * as Tone from 'tone';
@@ -7,6 +7,19 @@ import * as Tone from 'tone';
 interface IStateContext {
   state: IState,
   dispatch: React.Dispatch<IAction>
+}
+
+interface IEffectsList {
+  distortion: Tone.Distortion,
+  phaser: Tone.Phaser,
+  compressor: Tone.Compressor,
+  hipass: Tone.Filter,
+  tremolo: Tone.Tremolo,
+  pitchShift: Tone.PitchShift,
+  reverb: Tone.Reverb,
+  delay: Tone.PingPongDelay,
+  freeverb: Tone.Freeverb,
+  feedback: Tone.FeedbackDelay
 }
 
 const StateContext = createContext<IStateContext | null>(null);
@@ -62,4 +75,4 @@ function useGlobalState() {
   return context;
 }
 
-export { StateProvider, useGlobalState };
+export { StateProvider, useGlobalState, IEffectsList };

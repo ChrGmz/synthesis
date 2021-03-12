@@ -1,8 +1,34 @@
 import { v4 as uuidv4 } from 'uuid';
-import effectsList from '../components/effects';
+import effectsList, { IEffectsListConfig } from '../components/effects';
 import { IState } from './GlobalState';
+import * as Tone from 'tone';
 
 import synthSubCategoryOptions from '../components/instruments/Synth/synthOptions';
+import { resolveEffect } from '../utils';
+
+type Effect = 
+  'AutoFilter'
+| 'AutoPanner'
+| 'AutoWah'
+| 'BitCrusher'
+| 'Chebyshev'
+| 'Chorus'
+| 'Compressor'
+| 'Delay'
+| 'Distortion'
+| 'FeedbackDelay'
+| 'Filter'
+| 'FrequencyShifter'
+| 'Freeverb'
+| 'JCReverb'
+| 'PingPongDelay'
+| 'PitchShift'
+| 'Phaser'
+| 'Reverb'
+| 'StereoWidener'
+| 'Tremolo'
+| 'Vibrato';
+
 
 interface IAction {
   type: string,
@@ -11,7 +37,7 @@ interface IAction {
   instrument: string,
   value: number,
   values: number,
-  effect: any,
+  effect: Effect,
   volume: number,
   id: string,
   bars: string,
@@ -43,7 +69,8 @@ interface IOscillator {
 }
 
 interface IEffects {
-  name: string
+  name: string,
+  method: Effect
 }
 
 export default function stateReducer(state: IState, action: IAction): IState {
@@ -156,7 +183,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
       const { instruments, activeInstrumentId, maxBars } = state;
       const _bars: number = fractionStrToDecimal(bars);
 
-      const _instruments = instruments.map((_instrument: IInstrument) => {
+      const _instruments = instruments.map((_instrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
 
         return { ..._instrument, bars: _bars };
@@ -205,16 +232,15 @@ export default function stateReducer(state: IState, action: IAction): IState {
       const { effect } = action;
       const { instruments, activeInstrumentId, Tone } = state;
 
-      const _effect = {
-        name: effect,
-        method: new Tone[effect](...effectsList[effect]),
-      };
+      const _effect = resolveEffect(effect);
 
       // console.log(_effect);
 
       const _instruments = instruments.map((_instrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
         const { effects } = _instrument;
+
+        // const _effects = effects.map((eff) => resolveEffect(eff))
 
         return { ..._instrument, effects: [...effects, _effect] };
       });
@@ -295,4 +321,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument, IAction };
+export { IInstrument, IAction, Effect };

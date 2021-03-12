@@ -2,11 +2,11 @@ import { useReducer } from 'react';
 import * as Tone from 'tone';
 import stateReducer, { IInstrument } from './stateReducer';
 
-import effectsList, { IEffectsList } from '../components/effects';
+import effectsList from '../components/effects';
+import { IEffectsList } from './GlobalState.context';
 
 interface IState {
-  // TODO: Unsure since Tone is coming from library
-  Tone: any,
+  Tone: typeof Tone,
   master: {
     effects: any[],
     volume: number,
@@ -17,7 +17,7 @@ interface IState {
   instruments: IInstrument[],
   activeInstrumentId: string | boolean | null,
   maxBars: number,
-  effectsList: IEffectsList,
+  effectsList: IEffectsList | string[],
   categoryErrorFlag?: boolean,
 }
 
@@ -40,7 +40,7 @@ function useGlobalState() {
     categoryErrorFlag: false,
   });
 
-  return [state, dispatch];
+  return { state, dispatch };
 }
 
 export { useGlobalState, IState };

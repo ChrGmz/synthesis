@@ -1,28 +1,35 @@
-// interface IEffectsList {
-//   Distortion: Number[];
-//   Phaser: IPhaserObject[];
-//   Compressor: [number, number];
-//   Filter: [Number, String];
-//   Tremolo: [Number, Number],
-//   PitchShift: [Number],
-//   Reverb: [Number],
-//   Delay: [String, Number],
-//   Freeverb: [],
-//   FeedbackDelay: [String, Number],
-// }
+import { Effect } from '../../context/stateReducer';
+import * as Tone from 'tone';
 
-// interface IPhaserObject {
-//   frequency: Number;
-//   octaves: String;
-//   baseFrequency: Number;
-// }
+type IFilter = 
+'lowpass'
+| 'highpass'
+| 'bandpass'
+| 'lowshelf'
+| 'highshelf'
+| 'notch'
+| 'allpass'
+| 'peaking';
 
-const effectsList: {[key: string]: any[]} = {
+
+export interface IEffectsListConfig {
+  Distortion: [number] | undefined[],
+  Phaser: [Partial<Tone.PhaserOptions>] | [undefined],
+  Compressor: [number, number] | [undefined],
+  Filter: [number, IFilter],
+  Tremolo: [number, number],
+  PitchShift: [number],
+  Reverb: [number],
+  Delay: [string, number],
+  Freeverb: [number] | [],
+  FeedbackDelay: [string, number]
+}
+
+const effectsList: IEffectsListConfig = {
   Distortion: [0.8],
   Phaser: [
     {
       frequency: 1,
-      // changed to number as per Tone documentation
       octaves: 1,
       baseFrequency: 100,
     },
@@ -39,4 +46,4 @@ const effectsList: {[key: string]: any[]} = {
 
 export default effectsList;
 
-export { IEffectsList }
+

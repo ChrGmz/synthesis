@@ -6,8 +6,10 @@ import MasterPanel from '../MasterPanel/MasterPanel';
 
 import styles from './Dashboard.module.scss';
 
+import { IInstrument } from '../../context/stateReducer';
+
 function Dashboard() {
-  const [state, dispatch] = useGlobalState();
+  const { state, dispatch } = useGlobalState();
   const {
     Tone,
     maxBars,
@@ -117,7 +119,7 @@ function Dashboard() {
 export default Dashboard;
 
 //Helper functions
-function getActiveInstrument(instruments, activeInstrumentId) {
+function getActiveInstrument(instruments: IInstrument[], activeInstrumentId: string | boolean | null) {
   const instrument = instruments.find((_instrument) => {
     return _instrument.id === activeInstrumentId;
   });

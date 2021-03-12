@@ -1,5 +1,9 @@
 import { useRef } from 'react';
+import effectsList from '../components/effects';
+import { Effect } from '../context/stateReducer';
 const { Scale, Chord, Note } = require('@tonaljs/tonal');
+import * as Tone from 'tone';
+
 
 function randomChordProgression(root: string = 'C', octave: number = 4, scale: string) {
   const scaleName: string = `${root} ${scale}`;
@@ -102,10 +106,75 @@ function compareChanges(prevProps: any, newProps: any) {
   );
 }
 
+function resolveEffect (eff: Effect) {
+  switch (eff) {
+    case 'Distortion': 
+      return {
+        name: 'Distortion',
+        method: new Tone.Distortion(...effectsList.Distortion),
+      }
+    
+    case 'Phaser' : 
+      return {
+        name: 'Phaser',
+        method: new Tone.Phaser(...effectsList.Phaser),
+      }
+
+    case 'Compressor' :
+      return {
+        name: 'Compressor',
+        method: new Tone.Compressor(...effectsList.Compressor),
+      }
+
+    case 'Filter' :
+      return {
+        name: 'Filter',
+        method: new Tone.Filter(...effectsList.Filter),
+      }
+
+    case 'Tremolo' :
+      return {
+        name: 'Tremolo',
+        method: new Tone.Tremolo(...effectsList.Tremolo),
+      }
+
+    case 'PitchShift' :
+      return {
+        name: 'PitchShift',
+        method: new Tone.PitchShift(...effectsList.PitchShift),
+      }
+
+    case 'Reverb' :
+      return {
+        name: 'Reverb',
+        method: new Tone.Reverb(...effectsList.Reverb),
+      }
+
+    case 'Delay' :
+      return {
+        name: 'Delay',
+        method: new Tone.Delay(...effectsList.Delay),
+      }
+      
+    case 'Freeverb' :
+      return {
+        name: 'Freeverb',
+        method: new Tone.Freeverb(...effectsList.Freeverb),
+      }
+
+    case 'FeedbackDelay' :
+      return {
+        name: 'FeedbackDelay',
+        method: new Tone.FeedbackDelay(...effectsList.FeedbackDelay),
+      }
+  }
+}
+
 export {
   createArr,
   useDebounce,
   createMatrix,
   compareChanges,
   randomChordProgression,
+  resolveEffect,
 };

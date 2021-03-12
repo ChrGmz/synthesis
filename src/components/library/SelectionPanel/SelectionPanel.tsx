@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
-import { synths, polySynths } from '@instruments';
-import CategoryItems from '@library/CategoryItems/CategoryItems';
-import SelectionItems from '@library/SelectionItems/SelectionItems';
-import { useDebounce } from '@utils';
+import { synths, polySynths } from '../../instruments';
+import CategoryItems from '../CategoryItems/CategoryItems';
+import SelectionItems from '../SelectionItems/SelectionItems';
+import { useDebounce } from '../../../utils';
 
-import { getSampleNames } from '@api';
+import { getSampleNames } from '../../../api';
 import styles from './SelectionPanel.module.scss';
+import { IAction } from '../../../context/stateReducer';
+
+interface ISelectionPanel {
+  Tone: any,
+  dispatch: React.Dispatch<IAction>,
+  categoryErrorFlag?: boolean,
+  activeInstrumentId: string | boolean | null  
+}
 
 const SelectionPanel = React.memo(function SelectionPanel({
   Tone,
   dispatch,
   categoryErrorFlag,
   activeInstrumentId,
-}) {
+}: ISelectionPanel) {
   const [instruments, setInstruments] = useState([...synths, ...polySynths]);
   const [subCategories, setSubCategories] = useState(['synth', 'polySynth']);
   const [activeSubCategory, setActiveSubCategory] = useState(null);
