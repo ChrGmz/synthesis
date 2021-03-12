@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import stateReducer from './stateReducer';
+import stateReducer,  {IInstrument} from './stateReducer';
+import { IState } from './GlobalState';
+import { IAction } from './stateReducer';
 import * as Tone from 'tone';
 
 const StateContext = createContext(null);

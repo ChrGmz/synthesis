@@ -13,7 +13,7 @@ interface IAction {
   values: number,
   effect: any,
   volume: number,
-  id: number,
+  id: string,
   bars: string,
   octave: number
 }
@@ -22,11 +22,11 @@ interface IInstrument {
   category: string,
   subCategory: string,
   instrument: string,
-  id: number;
-  defaultSettings: IDefaultSettings,
-  synthOptions: any,
+  id: string;
+  defaultSettings?: IDefaultSettings,
+  synthOptions?: {[key: string]: object},
   effects: IEffects[],
-  oscillator: IOscillator
+  oscillator?: IOscillator
 }
 
 interface IDefaultSettings {
@@ -39,7 +39,7 @@ interface IDefaultSettings {
 
 interface IOscillator {
   volume: number,
-  type: string
+  type?: string
 }
 
 interface IEffects {
@@ -295,4 +295,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument };
+export { IInstrument, IAction };

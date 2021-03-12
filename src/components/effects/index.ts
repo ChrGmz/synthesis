@@ -1,6 +1,6 @@
-// interface EffectsList {
+// interface IEffectsList {
 //   Distortion: Number[];
-//   Phaser: PhaserObject[];
+//   Phaser: IPhaserObject[];
 //   Compressor: [number, number];
 //   Filter: [Number, String];
 //   Tremolo: [Number, Number],
@@ -10,7 +10,8 @@
 //   Freeverb: [],
 //   FeedbackDelay: [String, Number],
 // }
-// interface PhaserObject {
+
+// interface IPhaserObject {
 //   frequency: Number;
 //   octaves: String;
 //   baseFrequency: Number;
@@ -38,4 +39,4 @@ const effectsList: {[key: string]: any[]} = {
 
 export default effectsList;
 
-// export { EffectsList }
+export { IEffectsList }
