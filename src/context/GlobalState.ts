@@ -5,21 +5,20 @@ import stateReducer, { IInstrument } from './stateReducer';
 import effectsList from '../components/effects';
 
 interface IState {
-  Tone: typeof Tone,
-  master: IMaster[],
-  instruments: IInstrument,
+  // TODO: Unsure since Tone is coming from library
+  Tone: any,
+  master: {
+    effects: any[],
+    volume: number,
+    bpm: number,
+    metronome: boolean,
+    metronomeVol: number,
+  },
+  instruments: IInstrument[],
   activeInstrumentId: null,
   maxBars: number,
   effectsList: string[],
   categoryErrorFlag: boolean,
-}
-
-interface IMaster {
-  effects: string[],
-  volume: number,
-  bpm: number,
-  metronome: boolean,
-  metronomeVol: number,
 }
 
 const keys: string[] = Object.keys(effectsList);

@@ -1,22 +1,22 @@
-interface EffectsList {
-  Distortion: Number[];
-  Phaser: PhaserObject[];
-  Compressor: [Number, Number];
-  Filter: [Number, String];
-  Tremolo: [Number, Number],
-  PitchShift: [Number],
-  Reverb: [Number],
-  Delay: [String, Number],
-  Freeverb: [],
-  FeedbackDelay: [String, Number],
-}
-interface PhaserObject {
-  frequency: Number;
-  octaves: String;
-  baseFrequency: Number;
-}
+// interface EffectsList {
+//   Distortion: Number[];
+//   Phaser: PhaserObject[];
+//   Compressor: [number, number];
+//   Filter: [Number, String];
+//   Tremolo: [Number, Number],
+//   PitchShift: [Number],
+//   Reverb: [Number],
+//   Delay: [String, Number],
+//   Freeverb: [],
+//   FeedbackDelay: [String, Number],
+// }
+// interface PhaserObject {
+//   frequency: Number;
+//   octaves: String;
+//   baseFrequency: Number;
+// }
 
-const effectsList = {
+const effectsList: {[key: string]: any[]} = {
   Distortion: [0.8],
   Phaser: [
     {
@@ -37,4 +37,4 @@ const effectsList = {
 
 export default effectsList;
 
-export { EffectsList }
+// export { EffectsList }

@@ -22,7 +22,7 @@ function StateProvider({ children }) {
       distortion: new Tone.Distortion(0.8),
       phaser: new Tone.Phaser({
         frequency: 1,
-        octaves: '1',
+        octaves: 1,
         baseFrequency: 100,
       }),
       compressor: new Tone.Compressor(-30, 3),
