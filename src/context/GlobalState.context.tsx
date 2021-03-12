@@ -4,7 +4,12 @@ import { IState } from './GlobalState';
 import { IAction } from './stateReducer';
 import * as Tone from 'tone';
 
-const StateContext = createContext(null);
+interface IStateContext {
+  state: IState,
+  dispatch: React.Dispatch<IAction>
+}
+
+const StateContext = createContext<IStateContext | null>(null);
 StateContext.displayName = 'StateContext';
 
 function StateProvider({ children }: {[key: string] : [value: any]}) {
@@ -38,7 +43,7 @@ function StateProvider({ children }: {[key: string] : [value: any]}) {
     },
   });
 
-  const value = [state, dispatch];
+  const value = { state, dispatch };
 
   return (
     <StateContext.Provider value={value}>{children}</StateContext.Provider>

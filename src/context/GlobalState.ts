@@ -18,7 +18,7 @@ interface IState {
   activeInstrumentId: string | boolean | null,
   maxBars: number,
   effectsList: IEffectsList,
-  categoryErrorFlag: boolean,
+  categoryErrorFlag?: boolean,
 }
 
 const keys: string[] = Object.keys(effectsList);
