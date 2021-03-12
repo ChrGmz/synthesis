@@ -1,6 +1,5 @@
-import { Reducer } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import effectsList, { EffectsList } from '../components/effects';
+import effectsList from '../components/effects';
 import { IState } from './GlobalState';
 
 import synthSubCategoryOptions from '../components/instruments/Synth/synthOptions';
@@ -9,7 +8,14 @@ interface IAction {
   type: string,
   category: string,
   subCategory: string,
-  instrument: string
+  instrument: string,
+  value: number,
+  values: number,
+  effect: any,
+  volume: number,
+  id: number,
+  bars: string,
+  octave: number
 }
 
 interface IInstrument {
@@ -18,7 +24,9 @@ interface IInstrument {
   instrument: string,
   id: number;
   defaultSettings: IDefaultSettings,
-  synthOptions: any
+  synthOptions: any,
+  effects: IEffects[],
+  oscillator: IOscillator
 }
 
 interface IDefaultSettings {
@@ -29,7 +37,16 @@ interface IDefaultSettings {
   octave: number,
 }
 
-export default function stateReducer(state: IState, action: IAction) {
+interface IOscillator {
+  volume: number,
+  type: string
+}
+
+interface IEffects {
+  name: string
+}
+
+export default function stateReducer(state: IState, action: IAction): IState {
   switch (action.type) {
     case 'CREATE_INSTRUMENT': {
       const id: string = uuidv4();
@@ -139,7 +156,7 @@ export default function stateReducer(state: IState, action: IAction) {
       const { instruments, activeInstrumentId, maxBars } = state;
       const _bars: number = fractionStrToDecimal(bars);
 
-      const _instruments = instruments.map((_instrument) => {
+      const _instruments = instruments.map((_instrument: IInstrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
 
         return { ..._instrument, bars: _bars };
@@ -274,8 +291,8 @@ export default function stateReducer(state: IState, action: IAction) {
   }
 }
 
-function fractionStrToDecimal(str) {
-  return str.split('/').reduce((p, c) => p / c);
+function fractionStrToDecimal(str: any): number {
+  return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
 export { IInstrument };

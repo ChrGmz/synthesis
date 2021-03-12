@@ -22,7 +22,6 @@ function StateProvider({ children }: {[key: string] : [value: any]}) {
       distortion: new Tone.Distortion(0.8),
       phaser: new Tone.Phaser({
         frequency: 1,
-        // changed this to to number as Type Definition states octaves should be a number
         octaves: 1,
         baseFrequency: 100,
       }),

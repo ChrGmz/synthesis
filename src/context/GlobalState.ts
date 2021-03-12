@@ -4,7 +4,24 @@ import stateReducer from './stateReducer';
 
 import effectsList from '@effects';
 
-const keys = Object.keys(effectsList);
+interface IState {
+  // TODO: Unsure since Tone is coming from library
+  Tone: any,
+  master: {
+    effects: any[],
+    volume: number,
+    bpm: number,
+    metronome: boolean,
+    metronomeVol: number,
+  },
+  instruments: IInstrument[],
+  activeInstrumentId: null,
+  maxBars: number,
+  effectsList: string[],
+  categoryErrorFlag: boolean,
+}
+
+const keys: string[] = Object.keys(effectsList);
 
 function useGlobalState() {
   const [state, dispatch] = useReducer(stateReducer, {

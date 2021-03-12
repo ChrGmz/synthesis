@@ -1,6 +1,6 @@
 const synthOptions = {};
 
-const synthSubCategoryOptions = {
+const synthSubCategoryOptions: {[key: string]: object} = {
   Synth: {
     envelope: [0.01, 0.01, 1, 0.5],
     oscillator: {

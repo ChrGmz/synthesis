@@ -1,24 +1,22 @@
-interface EffectsList {
-  Distortion: number[];
-  Phaser: PhaserObject[];
-  Compressor: [number, number];
-  Filter: [number, String];
-  Tremolo: [number, number];
-  PitchShift: [number];
-  Reverb: [number];
-  Delay: [string, number];
-  Freeverb: [];
-  FeedbackDelay: [string, number];
-}
+// interface EffectsList {
+//   Distortion: Number[];
+//   Phaser: PhaserObject[];
+//   Compressor: [number, number];
+//   Filter: [Number, String];
+//   Tremolo: [Number, Number],
+//   PitchShift: [Number],
+//   Reverb: [Number],
+//   Delay: [String, Number],
+//   Freeverb: [],
+//   FeedbackDelay: [String, Number],
+// }
+// interface PhaserObject {
+//   frequency: Number;
+//   octaves: String;
+//   baseFrequency: Number;
+// }
 
-interface PhaserObject {
-  frequency: number;
-  // changed the octaves type to number as per the Tone docs.
-  octaves: number;
-  baseFrequency: number;
-}
-
-const effectsList: EffectsList = {
+const effectsList: {[key: string]: any[]} = {
   Distortion: [0.8],
   Phaser: [
     {
@@ -39,3 +37,5 @@ const effectsList: EffectsList = {
 };
 
 export default effectsList;
+
+// export { EffectsList }
