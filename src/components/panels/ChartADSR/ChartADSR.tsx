@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
-import { useDebounce } from '@utils';
+import { useDebounce } from '../../../utils';
 
 import 'chartjs-plugin-dragdata';
 import styles from './ChartADSR.module.scss';

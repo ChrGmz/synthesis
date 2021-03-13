@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import * as Tone from 'tone';
 
 import { synths, polySynths } from '../../instruments';
 import CategoryItems from '../CategoryItems/CategoryItems';
@@ -10,7 +11,7 @@ import styles from './SelectionPanel.module.scss';
 import { IAction } from '../../../context/stateReducer';
 
 interface ISelectionPanel {
-  Tone: any,
+  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   categoryErrorFlag?: boolean,
   activeInstrumentId: string | boolean | null  

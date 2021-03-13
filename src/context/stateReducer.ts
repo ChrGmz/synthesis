@@ -32,27 +32,42 @@ type Effect =
 
 interface IAction {
   type: string,
-  category: string,
-  subCategory: string,
-  instrument: string,
-  value: number,
-  values: number,
-  effect: Effect,
-  volume: number,
-  id: string,
-  bars: string,
-  octave: number
+  category?: string,
+  subCategory?: string,
+  instrument?: string,
+  value?: number,
+  values?: number,
+  effect?: Effect,
+  volume?: number,
+  id?: string,
+  bars?: string,
+  octave?: number
 }
 
 interface IInstrument {
-  category: string,
-  subCategory: string,
-  instrument: string,
+  category?: string,
+  subCategory?: string,
+  instrument?: string,
   id: string;
   defaultSettings?: IDefaultSettings,
   synthOptions?: {[key: string]: object},
   effects: IEffects[],
   oscillator?: IOscillator
+}
+
+interface IEnvelope {
+  attack: number,
+  decay: number,
+  sustain: number,
+  release: number,
+}
+
+
+interface ActiveInstrument extends IInstrument {
+  volume: number,
+  bars: string,
+  octave: number,
+  envelope: IEnvelope,
 }
 
 interface IDefaultSettings {
@@ -88,13 +103,15 @@ export default function stateReducer(state: IState, action: IAction): IState {
       };
 
       const synthOptions =
-        category === 'synth' || category === 'polySynth'
+        instrument &&
+        (category === 'synth' || category === 'polySynth')
           ? synthSubCategoryOptions[instrument]
           : {};
 
       console.log(synthOptions);
 
-      const newInstrument = {
+
+      const newInstrument: IInstrument = {
         category,
         subCategory,
         instrument,
@@ -165,6 +182,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
     case 'SET_ACTIVE_INSTRUMENT': {
       const { id } = action;
 
+      // TODO: do wtf we did on line 105: synthOptions
       return {
         ...state,
         activeInstrumentId: id,
@@ -240,9 +258,8 @@ export default function stateReducer(state: IState, action: IAction): IState {
         if (_instrument.id !== activeInstrumentId) return _instrument;
         const { effects } = _instrument;
 
-        // const _effects = effects.map((eff) => resolveEffect(eff))
-
-        return { ..._instrument, effects: [...effects, _effect] };
+        // TODO: changed from effects: [...effects, _effect]
+        return { ..._instrument, effects: {...effects, _effect} };
       });
 
       return {
@@ -321,4 +338,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument, IAction, Effect };
+export { IInstrument, IAction, Effect, ActiveInstrument };

@@ -7,6 +7,7 @@ import MasterPanel from '../MasterPanel/MasterPanel';
 import styles from './Dashboard.module.scss';
 
 import { IInstrument } from '../../context/stateReducer';
+import Playground from '../Playground/Playground';
 
 function Dashboard() {
   const { state, dispatch } = useGlobalState();
@@ -43,8 +44,11 @@ function Dashboard() {
     setPlayState(Tone.Transport.state);
   }, [Tone.Transport, playState]);
 
-  const activeInstrument =
-    activeInstrumentId && getActiveInstrument(instruments, activeInstrumentId);
+  // const activeInstrument = 
+  //   activeInstrumentId && getActiveInstrument(instruments, activeInstrumentId);
+    
+  // TODO : Fixed our issue...but
+  const activeInstrument = getActiveInstrument(instruments, activeInstrumentId) || null
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {

@@ -86,7 +86,7 @@ function useDebounce<F extends Function>(fn: F, timeout: number = 1000) {
   };
 }
 
-function createArr(n: number, fill: number = 0, cb = (el: number) => el)  {
+function createArr(n: number, fill: number | null = 0, cb = (el: number, index: number) => el)  {
   const arr: number[] = Array(n).fill(fill).map(cb);
   return arr;
 }
@@ -169,6 +169,8 @@ function resolveEffect (eff: Effect) {
       }
   }
 }
+
+
 
 export {
   createArr,

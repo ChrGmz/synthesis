@@ -1,11 +1,32 @@
 import React, { useEffect } from 'react';
+import * as Tone from 'tone';
+import { IAction } from '../../context/stateReducer';
 
-import PanelModuleContainer from '@panels/PanelModuleContainer/PanelModuleContainer';
-import Visualizer from '@panels/Visualizer/Visualizer';
-import Slider from '@panels/Slider/Slider';
+import PanelModuleContainer from '../panels/PanelModuleContainer/PanelModuleContainer';
+import Visualizer from '../panels/Visualizer/Visualizer';
+import Slider from '../panels/Slider/Slider';
 
-import { Play, Pause } from '@resources/icons';
+import { Play, Pause } from '../../resources/icons';
 import styles from './MasterPanel.module.scss';
+
+type PlayState = "started" | "stopped" | "paused"
+
+interface IMasterProperties {
+    effects: any[];
+    volume: number;
+    bpm: number;
+    metronome: boolean;
+    metronomeVol: number;
+}
+
+interface IMasterPanel {
+  Tone: typeof Tone,
+  dispatch: React.Dispatch<IAction>,
+  playState: PlayState,
+  masterProperties: IMasterProperties,
+  handleTransport: () => void,
+}
+
 
 function MasterPanel({
   Tone,
@@ -13,7 +34,7 @@ function MasterPanel({
   playState,
   handleTransport,
   masterProperties,
-}) {
+}: IMasterPanel) {
   const { metronomeVol, bpm, volume } = masterProperties;
 
   const handleBPM = (value) => dispatch({ type: 'UPDATE_BPM', value });

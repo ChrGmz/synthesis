@@ -4,6 +4,14 @@ import EffectsPanel from './EffectsPanel/EffectsPanel';
 import VolumePanelModule from './VolumePanelModule/VolumePanelModule';
 import Oscillator from './Oscillator/Oscillator';
 
+interface IPanelModules {
+  adsr: ChartADSR,
+  effects: EffectsPanel,
+  bars: BarsPanelModule,
+  volume: VolumePanelModule,
+  oscillator: Oscillator
+}
+
 const panelModules = {
   adsr: ChartADSR,
   effects: EffectsPanel,

@@ -1,9 +1,21 @@
 import React from 'react';
+import * as Tone from 'tone';
 
-import { instrumentComponents } from './instruments';
-import TransportPosition from '@panels/TransportPosition/TransportPosition';
+import { instrumentComponents } from '../instruments';
+import TransportPosition from '../panels/TransportPosition/TransportPosition';
 
 import styles from './Playground.module.scss';
+import { IAction, IInstrument } from '../../context/stateReducer';
+
+interface IPlayground {
+  Tone: typeof Tone,
+  maxBars: number,
+  dispatch: React.Dispatch<IAction>,
+  instruments: IInstrument[],
+  metronomeVol: number,
+  activeInstrumentId: string | boolean | null,
+  categoryErrorFlag?: boolean
+}
 
 function Playground({
   Tone,
@@ -12,7 +24,7 @@ function Playground({
   instruments,
   metronomeVol,
   activeInstrumentId,
-}) {
+}: IPlayground) {
   // Create component dynamically, based on the instrument that the user selects
   function renderInstruments() {
     return instruments.map((_instrument) => {
