@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useDebounce } from '../../../utils';
+import { IAction, IEnvelope } from '../../../context/stateReducer';
 
 import 'chartjs-plugin-dragdata';
 import styles from './ChartADSR.module.scss';
 import { useEffect } from 'react';
 
-function ChartADSR({ envelope, dispatch }) {
+interface IChartADSRArgument {
+  envelope?: IEnvelope,
+  dispatch: React.Dispatch<IAction> 
+}
+
+function ChartADSR({ envelope, dispatch }: IChartADSRArgument ): JSX.Element {
   const [values, setValues] = useState([]);
   const labels = ['A', 'D', 'S', 'R'];
 

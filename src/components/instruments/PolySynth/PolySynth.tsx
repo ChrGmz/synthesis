@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
-import Sequencer from '@components/Sequencer/Sequencer';
-import Select from '@components/Select/Select';
+import Sequencer from '../../Sequencer/Sequencer';
+import Select from '../../Select/Select';
 
-import { createArr, createMatrix, compareChanges } from '@utils';
+import { createArr, createMatrix, compareChanges } from '../../../utils';
 import polySynth from './polySynthBuilder';
 
 import styles from './PolySynth.module.scss';

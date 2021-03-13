@@ -62,12 +62,12 @@ interface IEnvelope {
   release: number,
 }
 
-
+// TODO: Made optional to fix InstrumentPanel on Dashboard
 interface ActiveInstrument extends IInstrument {
-  volume: number,
-  bars: string,
-  octave: number,
-  envelope: IEnvelope,
+  volume?: number,
+  bars?: string,
+  octave?: number,
+  envelope?: IEnvelope,
 }
 
 interface IDefaultSettings {
@@ -182,11 +182,16 @@ export default function stateReducer(state: IState, action: IAction): IState {
     case 'SET_ACTIVE_INSTRUMENT': {
       const { id } = action;
 
-      // TODO: do wtf we did on line 105: synthOptions
-      return {
-        ...state,
-        activeInstrumentId: id,
-      };
+      if (id) {
+        return {
+          ...state,
+          activeInstrumentId: id,
+        };
+      } else {
+        return {
+          ...state
+        }
+      }
     }
 
     case 'REMOVE_ACTIVE_INSTRUMENT': {
@@ -250,7 +255,9 @@ export default function stateReducer(state: IState, action: IAction): IState {
       const { effect } = action;
       const { instruments, activeInstrumentId, Tone } = state;
 
-      const _effect = resolveEffect(effect);
+      const _effect = effect && resolveEffect(effect);
+
+      
 
       // console.log(_effect);
 
@@ -276,10 +283,16 @@ export default function stateReducer(state: IState, action: IAction): IState {
         if (_instrument.id !== activeInstrumentId) return _instrument;
         const { oscillator } = _instrument;
 
-        return {
-          ..._instrument,
-          oscillator: { ...oscillator, ...oscProps },
-        };
+        if (oscillator) {
+          return {
+            ..._instrument,
+            oscillator: { ...oscillator, ...oscProps },
+          };
+        } else {
+          return {
+            ..._instrument,
+          }
+        }
       });
 
       return {
@@ -311,21 +324,33 @@ export default function stateReducer(state: IState, action: IAction): IState {
       const { value } = action;
       const { master } = state;
 
-      return { ...state, master: { ...master, bpm: value } };
+      if (value) {
+        return { ...state, master: { ...master, bpm: value } };
+      } else {
+        return { ...state };
+      }
     }
 
     case 'UPDATE_METRONOME_VOL': {
       const { value } = action;
       const { master } = state;
 
-      return { ...state, master: { ...master, metronomeVol: value } };
+      if (value) {
+        return { ...state, master: { ...master, metronomeVol: value } };
+      } else {
+        return { ...state };
+      }
     }
 
     case 'UPDATE_MASTER_VOLUME': {
       const { value } = action;
       const { master } = state;
 
-      return { ...state, master: { ...master, volume: value } };
+      if (value) {
+        return { ...state, master: { ...master, volume: value } };
+      } else {
+        return { ...state };
+      }
     }
 
     default: {
@@ -338,4 +363,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument, IAction, Effect, ActiveInstrument };
+export { IInstrument, IAction, Effect, ActiveInstrument, IEffects, IEnvelope };

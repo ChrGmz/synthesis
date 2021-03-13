@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
+import { IEffectsList } from '../../../context/GlobalState.context';
+import { IAction, IEffects } from '../../../context/stateReducer';
 
-import { ArrowU, ArrowD } from '@resources/icons';
+import { ArrowU, ArrowD } from '../../../resources/icons';
 
 import styles from './EffectsPanel.module.scss';
 
-function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }) {
+
+interface IEffectsPanelArguments {
+  activeInstrumentEffects: IEffects[],
+  dispatch: React.Dispatch<IAction>,
+  effectsList: IEffectsList
+}
+
+function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffectsPanelArguments): JSX.Element {
   const [effects, setActiveEffects] = useState(effectsList);
 
   function handleEffect(effect, active) {

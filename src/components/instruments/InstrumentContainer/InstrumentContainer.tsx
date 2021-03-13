@@ -1,9 +1,25 @@
 import React, { useState, useRef } from 'react';
 
-import Select from '@components/Select/Select';
+import Select from '../../Select/Select';
 
-import { Mute, Sound } from '@resources/icons';
+import { Mute, Sound } from '../../../resources/icons';
 import styles from './InstrumentContainer.module.scss';
+
+interface IMenuOptions {
+  name: string,
+  method: () => void | ((a: number) => void),
+  args?: [number] | []
+}
+
+interface IInstrumentContainer {
+  handleActiveInstrument: () => void,
+  handleDeleteInstrument: () => void | ((a: any) => void),
+  menuOptions: IMenuOptions[],
+  handleMute: () => void,
+  active: boolean,
+  name: string,
+  mute: boolean,
+}
 
 function InstrumentContainer({
   handleActiveInstrument,
@@ -13,14 +29,14 @@ function InstrumentContainer({
   active,
   name,
   mute,
-}) {
+}: IInstrumentContainer) {
   const [menu, setMenu] = useState(false);
 
   const timeoutRef = useRef(null);
 
   function renderMenu() {
     return menuOptions.map((option, idx) => {
-      const { name, method, args = [] } = option;
+      const { name, method, args = [] }: IMenuOptions = option;
       return (
         <>
           <div

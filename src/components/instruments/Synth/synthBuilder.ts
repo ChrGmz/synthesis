@@ -1,4 +1,4 @@
-import { createArr } from '@utils';
+import { createArr } from '../../../utils';
 
 export default function synthBuilder(Tone) {
   return {

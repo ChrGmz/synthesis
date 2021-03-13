@@ -44,11 +44,8 @@ function Dashboard() {
     setPlayState(Tone.Transport.state);
   }, [Tone.Transport, playState]);
 
-  // const activeInstrument = 
-  //   activeInstrumentId && getActiveInstrument(instruments, activeInstrumentId);
-    
   // TODO : Fixed our issue...but
-  const activeInstrument = getActiveInstrument(instruments, activeInstrumentId) || null
+  const activeInstrument = getActiveInstrument(instruments, activeInstrumentId);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
@@ -128,5 +125,9 @@ function getActiveInstrument(instruments: IInstrument[], activeInstrumentId: str
     return _instrument.id === activeInstrumentId;
   });
 
-  return instrument;
+  if (instrument) {
+    return instrument;
+  } else {
+    return null;
+  }
 }

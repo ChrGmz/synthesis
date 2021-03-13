@@ -1,10 +1,15 @@
 import React from 'react';
 
-import Select from '@components/Select/Select';
+import Select from '../../Select/Select';
 
 import styles from './Oscillator.module.scss';
+import { IAction } from '../../../context/stateReducer';
 
-function Oscillator({ dispatch }) {
+interface IOscillatorPanelArguments {
+  dispatch: React.Dispatch<IAction>
+}
+
+function Oscillator({ dispatch }: IOscillatorPanelArguments): JSX.Element {
   const options = ['sine', 'square', 'sawtooth', 'triangle'];
 
   function handleOscillator(oscType) {

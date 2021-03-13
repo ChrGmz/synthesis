@@ -1,9 +1,14 @@
 import React from 'react';
-import Slider from '@panels/Slider/Slider';
+import Slider from '../Slider/Slider';
 
 import styles from './VolumePanelModule.module.scss';
 
-function VolumePanelModule({ handleVolume, volume }) {
+interface IVolumePanelArguments {
+  handleVolume: (a: number) => void,
+  volume: number
+}
+
+function VolumePanelModule({ handleVolume, volume }: IVolumePanelArguments): JSX.Element {
   return (
     <div className={styles.container}>
       <Slider

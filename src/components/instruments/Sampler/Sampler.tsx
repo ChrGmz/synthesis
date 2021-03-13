@@ -6,10 +6,10 @@ import React, {
   useRef,
 } from 'react';
 
-import Sequencer from '@components/Sequencer/Sequencer';
+import Sequencer from '../../Sequencer/Sequencer';
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
 
-import { createArr, compareChanges } from '@utils';
+import { createArr, compareChanges } from '../../../utils';
 import samplerBuilder from './samplerBuilder';
 import styles from './Sampler.module.scss';
 
@@ -98,7 +98,7 @@ const Sampler = React.memo(function Sampler({
     [pattern]
   );
 
-  function setActiveTilesByStep(step) {
+  function setActiveTilesByStep(step: number) {
     setPattern(activeTilesByStep(totalTiles, step));
   }
 
