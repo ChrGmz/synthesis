@@ -3,7 +3,13 @@ import { gsap } from 'gsap';
 
 import styles from './Switch.module.scss';
 
-function Switch({ active, handleEffect, effect }) {
+interface ISwitch {
+  active: boolean,
+  handleEffect: ,
+  effect: 
+}
+
+function Switch({ active, handleEffect, effect }: ISwitch) {
   const point = useRef(null);
 
   // useEffect(() => {

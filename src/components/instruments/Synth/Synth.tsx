@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import * as Tone from 'tone';
+import { IAction, IInstrument, IOscillator } from '../../../context/stateReducer';
+import { IProperties } from '../PolySynth/PolySynth';
 
-import Sequencer from '@components/Sequencer/Sequencer';
+import Sequencer from '../../Sequencer/Sequencer';
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
 
 import {
@@ -8,11 +11,24 @@ import {
   createMatrix,
   compareChanges,
   randomChordProgression,
-} from '@utils';
+} from '../../../utils';
 import synthBuilder from './synthBuilder';
 import styles from './Synth.module.scss';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+interface ISynth {
+  Tone: typeof Tone,
+  dispatch: React.Dispatch<IAction>,
+  active: boolean,
+  properties: IPropertiesSynth,
+  instrument: IInstrument,
+  subCategory: string
+}
+
+interface IPropertiesSynth extends IProperties {
+  oscillator: IOscillator,
+}
 
 const Synth = React.memo(function Synth({
   Tone,
@@ -21,7 +37,7 @@ const Synth = React.memo(function Synth({
   properties,
   instrument: _instrument,
   subCategory,
-}) {
+}: ISynth) {
   const {
     effects,
     id,
@@ -81,13 +97,13 @@ const Synth = React.memo(function Synth({
     mute,
   ]);
 
-  const toggleActive = (col, row, note) => {
+  const toggleActive = (col: number, row: number, note: string) => {
     const _progression = [...progression];
 
     _progression[col] = progression[col] !== note ? note : 0;
 
     const _pattern = pattern.map((patternRow, currRow) => {
-      return patternRow.map((el, idx) => {
+      return patternRow.map((el: number, idx: number) => {
         if (idx !== col) return el;
         else if (row === currRow && el === 0) return note;
         else return 0;
@@ -210,13 +226,13 @@ compareChanges);
 
 export default Synth;
 
-function getIndexOfNotes(progression) {
-  return progression.map((note, i) => {
+function getIndexOfNotes(progression: string[]) {
+  return progression.map((note, i: number) => {
     return notes.indexOf(note.replace(/[0-9]/g, ''));
   });
 }
 
-function createMatrixWithPattern(rows, cols, indexes) {
+function createMatrixWithPattern(rows: number, cols: number, indexes: number[]) {
   return Array(rows)
     .fill(null)
     .map((_, row) => {

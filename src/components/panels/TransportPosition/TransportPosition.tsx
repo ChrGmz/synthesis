@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createArr } from '@utils';
+import { createArr } from '../../../utils';
+import * as Tone from 'tone';
 
 import styles from './TransportPosition.module.scss';
 
-function TransportPosition({ Tone, maxBars, metronomeVol }) {
+interface ITransportPosition {
+  Tone: typeof Tone,
+  maxBars: number,
+  metronomeVol: number
+}
+
+function TransportPosition({ Tone, maxBars, metronomeVol }: ITransportPosition) {
   const [activeCol, setActiveCol] = useState(Tone.Transport.position);
 
   const tiles = maxBars * 16;

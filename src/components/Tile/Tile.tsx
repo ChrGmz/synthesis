@@ -1,6 +1,17 @@
 import React from 'react';
 import styles from './Tile.module.scss';
 
+interface ITile {
+  instrument: ,
+  note: ,
+  active: ,
+  row: ,
+  col: ,
+  toggleActive: ,
+  handlePainting: ,
+  isPainting: ,
+}
+
 function Tile({
   instrument,
   note,
@@ -10,7 +21,7 @@ function Tile({
   toggleActive,
   handlePainting,
   isPainting,
-}) {
+}: ITile) {
   function handlePlay() {
     if (active) return;
     instrument.triggerAttackRelease(note, 0.5);

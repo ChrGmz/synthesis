@@ -8,17 +8,32 @@ import React, {
 
 import Sequencer from '../../Sequencer/Sequencer';
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
+import * as Tone from 'tone';
+import { IAction } from '../../../context/stateReducer';
+import { IProperties } from '../PolySynth/PolySynth';
 
 import { createArr, compareChanges } from '../../../utils';
 import samplerBuilder from './samplerBuilder';
 import styles from './Sampler.module.scss';
+
+interface ISampler {
+  Tone: typeof Tone,
+  dispatch: React.Dispatch<IAction>,
+  active: boolean,
+  properties: IPropertiesSampler,
+}
+
+interface IPropertiesSampler extends IProperties {
+  subCategory: string,
+  instrument: string
+}
 
 const Sampler = React.memo(function Sampler({
   Tone,
   dispatch,
   active,
   properties,
-}) {
+}: ISampler) {
   const {
     id,
     effects,

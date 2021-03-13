@@ -1,4 +1,4 @@
-import { createArr } from '@utils';
+import { createArr } from '../../../utils';
 
 export default function synthBuilder(Tone) {
   const synths = ['Synth', 'AMSynth', 'DuoSynth', 'MembraneSynth'];
@@ -14,7 +14,8 @@ export default function synthBuilder(Tone) {
 
   function createSynth(
     instrument,
-    envelope = [],
+    // TODO: took out '= []' 
+    envelope,
     volume,
     effects,
     oscillators
@@ -38,11 +39,11 @@ export default function synthBuilder(Tone) {
     return _synth;
   }
 
-  function createSynthSequence(synth, chords, bars, subdivisions) {
+  function createSynthSequence(synth, chords, bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(
-      (time, col) => {
+      (time: number, col: number) => {
         if (chords[col].length < 1) return;
         synth.triggerAttackRelease(chords[col], '8n', time);
       },
@@ -56,21 +57,21 @@ export default function synthBuilder(Tone) {
 
     return sequence;
   }
-  function addNoteToChord(chords, note, col) {
+  function addNoteToChord(chords, note: string, col: number) {
     return chords.map((chord, idx) => {
       if (idx !== col) return chord;
       else return [...chord, note];
     });
   }
 
-  function removeNoteFromChord(chords, note, col) {
+  function removeNoteFromChord(chords, note: string, col: number) {
     return chords.map((chord, idx) => {
       if (idx !== col) return chord;
       else return chord.filter((_note) => _note !== note);
     });
   }
 
-  function setNewOctaveToChords(chords, octave) {
+  function setNewOctaveToChords(chords, octave: number) {
     return chords.map((chord) =>
       chord.map((el) => el.replace(/[0-9]/g, octave))
     );

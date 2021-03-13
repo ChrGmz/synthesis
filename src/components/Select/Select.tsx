@@ -1,13 +1,21 @@
 import React, { useRef } from 'react';
 import styles from './Select.module.scss';
 
+interface ISelect {
+  options: ,
+  onChangeFn: ,
+  defaultOption: ,
+  initialOption: ,
+  maxWidth: string,
+}
+
 function Select({
   options,
   onChangeFn,
   defaultOption,
   initialOption,
   maxWidth = '80px',
-}) {
+}: ISelect) {
   const selectRef = useRef(null);
 
   function renderOptions() {

@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react';
 
-import { useDebounce } from '@utils';
+import { useDebounce } from '../../../utils';
 
 import styles from './Slider.module.scss';
+
+interface ISlider {
+  handleChangeFn: ,
+  min: number,
+  max: number,
+  step: number,
+  label: ,
+  defaultVal: ,
+  noRotate: boolean,
+}
 
 function Slider({
   handleChangeFn,

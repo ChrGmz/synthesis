@@ -10,13 +10,13 @@ import styles from './EffectsPanel.module.scss';
 interface IEffectsPanelArguments {
   activeInstrumentEffects: IEffects[],
   dispatch: React.Dispatch<IAction>,
-  effectsList: IEffectsList
+  effectsList: IEffectsList[]
 }
 
 function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffectsPanelArguments): JSX.Element {
   const [effects, setActiveEffects] = useState(effectsList);
 
-  function handleEffect(effect, active) {
+  function handleEffect(effect, active: boolean) {
     active ? handleRemoveEffect(effect) : handleAddEffect(effect);
   }
 
@@ -29,7 +29,7 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
   }
 
   function renderEffects() {
-    return effects.slice(0, 3).map((_effect, idx) => {
+    return effects.slice(0, 3).map((_effect, idx: number) => {
       //check if effect is included in the effects of the active instrument and if so set it to active
       const active =
         activeInstrumentEffects &&

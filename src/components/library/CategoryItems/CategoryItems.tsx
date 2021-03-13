@@ -1,7 +1,13 @@
 import React from 'react';
 import styles from './CategoryItems.module.scss';
 
-function CategoryItems({ category, handleSubCategory, active }) {
+interface ICategoryItems {
+  category: ,
+  handleSubCategory: ,
+  active: boolean
+}
+
+function CategoryItems({ category, handleSubCategory, active }: ICategoryItems) {
   return (
     <div
       className={`${styles.container} ${active && styles.active}`}

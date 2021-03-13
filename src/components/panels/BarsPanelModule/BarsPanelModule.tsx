@@ -7,7 +7,7 @@ interface IBarsPanelArguments {
   handleMaxTiles: (a: string) => void,
   barsOptions: string[],
   getOptionsIdx: (a: number) => number,
-  bars: string,
+  bars: number,
   handleOctave: (a: number) => void,
   octaveOptions: number[],
   octave: number

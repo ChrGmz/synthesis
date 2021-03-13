@@ -27,7 +27,6 @@ interface IMasterPanel {
   handleTransport: () => void,
 }
 
-
 function MasterPanel({
   Tone,
   dispatch,
@@ -37,12 +36,12 @@ function MasterPanel({
 }: IMasterPanel) {
   const { metronomeVol, bpm, volume } = masterProperties;
 
-  const handleBPM = (value) => dispatch({ type: 'UPDATE_BPM', value });
+  const handleBPM = (value: number) => dispatch({ type: 'UPDATE_BPM', value });
 
-  const handleBPMVol = (value) =>
+  const handleBPMVol = (value: number) =>
     dispatch({ type: 'UPDATE_METRONOME_VOL', value });
 
-  const handleVolume = (value) =>
+  const handleVolume = (value: number) =>
     dispatch({ type: 'UPDATE_MASTER_VOLUME', value });
 
   return (

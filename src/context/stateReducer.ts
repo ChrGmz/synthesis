@@ -56,10 +56,10 @@ interface IInstrument {
 }
 
 interface IEnvelope {
-  attack: number,
-  decay: number,
-  sustain: number,
-  release: number,
+  attack?: number,
+  decay?: number,
+  sustain?: number,
+  release?: number,
 }
 
 // TODO: Made optional to fix InstrumentPanel on Dashboard
@@ -363,4 +363,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument, IAction, Effect, ActiveInstrument, IEffects, IEnvelope };
+export { IInstrument, IAction, Effect, ActiveInstrument, IEffects, IEnvelope, IOscillator };

@@ -1,4 +1,6 @@
-import { createArr } from '@utils';
+import { createArr } from '../../../utils';
+import * as Tone from 'tone';
+import { IEffects } from '../../../context/stateReducer';
 
 export default function samplerBuilder(Tone) {
   return {
@@ -7,7 +9,7 @@ export default function samplerBuilder(Tone) {
     activeTilesByStep,
   };
 
-  function createSample(instrument, subCategory, volume, effects, mute) {
+  function createSample(instrument: string, subCategory: string, volume: number, effects: IEffects[], mute: boolean) {
     const _sample = new Tone.Sampler({
       urls: {
         A1: `http://localhost:3001/samples/${subCategory}/${instrument}`,
@@ -31,18 +33,18 @@ export default function samplerBuilder(Tone) {
     return _sample;
   }
 
-  function activeTilesByStep(totalTiles, step) {
+  function activeTilesByStep(totalTiles: number, step: number) {
     return createArr(totalTiles, null, (_, idx) => {
       return idx % step === 0 ? 1 : 0;
     });
   }
 
-  function createSequence(sample, pattern, bars, subdivisions, humanize) {
+  function createSequence(sample, pattern, bars: number, subdivisions: number, humanize) {
     const totalTiles = bars * subdivisions;
     const note = 'F1';
 
     const sequence = new Tone.Sequence(
-      (time, col) => {
+      (time: number, col: number) => {
         if (pattern[col] !== 0) sample.triggerAttackRelease(note, '1n', time);
       },
       createArr(totalTiles, null, (_, idx) => idx),

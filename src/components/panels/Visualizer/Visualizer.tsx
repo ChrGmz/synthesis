@@ -1,11 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import * as Tone from 'tone';
 
-import { createArr } from '@utils';
+import { createArr } from '../../../utils';
 
 import styles from './Visualizer.module.scss';
 
-function Visualizer({ Tone, playing }) {
+interface IVisualizer {
+  Tone: typeof Tone,
+  playing: boolean
+}
+
+function Visualizer({ Tone, playing }: IVisualizer) {
   const lineRef = useRef([]);
 
   useEffect(() => {

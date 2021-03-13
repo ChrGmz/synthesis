@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import Tile from '@components/Tile/Tile';
+import Tile from '../Tile/Tile';
 
 import styles from './Sequencer.module.scss';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+interface ISequencer {
+  instrument: ,
+  pattern: ,
+  toggleActive: ,
+  note: ,
+  keyboard: ,
+  octave: ,
+}
 
 const Sequencer = React.memo(function Sequencer({
   instrument,
@@ -12,7 +21,7 @@ const Sequencer = React.memo(function Sequencer({
   note,
   keyboard,
   octave = 4,
-}) {
+}: ISequencer) {
   const [isPainting, setIsPainting] = useState(false);
 
   function handlePainting() {
@@ -36,7 +45,7 @@ const Sequencer = React.memo(function Sequencer({
         >
           <h3>{_note.replace(/[0-9]/g, '')}</h3>
         </div>
-        {_pattern.map((active, col) => {
+        {_pattern.map((active: number, col: number) => {
           return (
             <Tile
               instrument={instrument}

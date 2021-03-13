@@ -6,7 +6,7 @@ import { Mute, Sound } from '../../../resources/icons';
 import styles from './InstrumentContainer.module.scss';
 import { TimeoutRef } from '../../../utils';
 
-interface IMenuOptions {
+export interface IMenuOptions {
   name: string,
   method: ((a?: number) => void),
   args?: [number] | []

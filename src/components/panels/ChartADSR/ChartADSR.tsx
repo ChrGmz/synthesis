@@ -16,7 +16,7 @@ function ChartADSR({ envelope, dispatch }: IChartADSRArgument ): JSX.Element {
   const [values, setValues] = useState([]);
   const labels = ['A', 'D', 'S', 'R'];
 
-  const onDragEnd = useDebounce(function (_, __, idx, value) {
+  const onDragEnd = useDebounce(function (_, __, idx: number, value: number) {
     const val = clamp(labels[idx], value);
     const _values = [...values];
 
@@ -92,7 +92,7 @@ function ChartADSR({ envelope, dispatch }: IChartADSRArgument ): JSX.Element {
 
 export default ChartADSR;
 
-function clamp(key, val) {
+function clamp(key: string, val: number) {
   switch (key) {
     case 'A':
       return val <= 2 ? val : 2;

@@ -1,8 +1,18 @@
 import React, { useRef } from 'react';
+import * as Tone from 'tone';
 
-import { useDebounce } from '@utils';
+import { useDebounce } from '../../../utils';
 
 import styles from './SelectionItems.module.scss';
+
+interface ISelectionItems {
+  Tone: typeof Tone,
+  volume: number,
+  category: string,
+  subCategory: string,
+  instrument: ,
+  handleSelectInstrument: ,
+}
 
 function SelectionItems({
   Tone,
@@ -11,7 +21,7 @@ function SelectionItems({
   subCategory,
   instrument,
   handleSelectInstrument,
-}) {
+}: ISelectionItems) {
   const prevSample = useRef(null);
 
   const handleClick = useDebounce(

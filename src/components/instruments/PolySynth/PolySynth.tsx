@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import * as Tone from 'tone';
-import { IAction, IInstrument } from '../../../context/stateReducer';
+import { IAction, IEffects, IEnvelope, IInstrument, IOscillator } from '../../../context/stateReducer';
+import { IMenuOptions } from '../InstrumentContainer/InstrumentContainer';
 
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
 import Sequencer from '../../Sequencer/Sequencer';
@@ -17,22 +18,26 @@ interface IPolySynth {
   Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   active: boolean,
-  properties: ,
+  properties: IProperties,
   instrument: IInstrument,
   subCategory: string
 }
 
-interface IProperties {
-  effects: ,
-  id: ,
-  volume: ,
-  bars: ,
-  subdivisions: ,
-  octave: ,
-  envelope: ,
-  oscillators: ,
-  savedChords = [],
-  savedPattern = [],
+export interface IProperties {
+  effects: IEffects[],
+  id: string,
+  volume: number,
+  bars: number,
+  subdivisions: number,
+  octave: number,
+  envelope: IEnvelope[],
+  oscillators: IOscillator[],
+  savedChords: string[][],
+  savedPattern: number[][] | number[],
+}
+
+export type SynthRefLike = {
+  dispose:  | null,
 }
 
 const PolySynth = React.memo(function PolySynth({
@@ -66,7 +71,7 @@ const PolySynth = React.memo(function PolySynth({
   } = polySynth(Tone);
 
   const [instrument, setInstrument] = useState(_instrument);
-  const [synth, setSynth] = useState(null);
+  const [synth, setSynth]: [Tone.PolySynth | null, React.Dispatch<SetStateAction<null>>] = useState(null);
   const [chords, setChords] = useState(savedChords);
   const [pattern, setPattern] = useState(savedPattern);
 
@@ -97,7 +102,7 @@ const PolySynth = React.memo(function PolySynth({
     octave,
   ]);
 
-  const toggleActive = (col, row, note) => {
+  const toggleActive = (col: number, row: number, note: string) => {
     const _pattern = [...pattern];
     let _chords;
 
@@ -183,7 +188,7 @@ const PolySynth = React.memo(function PolySynth({
 
   const handleSelectInstrument = (option) => setInstrument(option);
 
-  const menuOptions = [];
+  const menuOptions: IMenuOptions = [];
 
   return (
     <>

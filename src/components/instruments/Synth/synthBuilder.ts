@@ -41,11 +41,11 @@ export default function synthBuilder(Tone) {
     return _synth;
   }
 
-  function createSynthSequence(synth, progression, bars, subdivisions) {
+  function createSynthSequence(synth, progression, bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(
-      (time, col) => {
+      (time: number, col: number) => {
         if (!progression[col]) return;
         synth.triggerAttackRelease(progression[col], '8n', time);
       },
@@ -64,7 +64,7 @@ export default function synthBuilder(Tone) {
 
   function createArpeggiatorSequence(synth, progression) {
     const sequence = new Tone.Pattern(
-      (time, note) => {
+      (time: number, note: string) => {
         synth.triggerAttackRelease(note, '8n', time);
       },
       progression,
@@ -90,7 +90,7 @@ export default function synthBuilder(Tone) {
   //   return sequence;
   // }
 
-  function setNewOctaveToProgression(progression, octave) {
+  function setNewOctaveToProgression(progression: string[], octave) {
     return progression.map(
       (note) => typeof note === 'string' && note.replace(/[0-9]/g, octave)
     );
