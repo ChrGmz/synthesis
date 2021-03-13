@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '../Slider/Slider.tsx';
+import Slider from '../Slider/Slider';
 
 import styles from './EnvelopePanel.module.scss';
 

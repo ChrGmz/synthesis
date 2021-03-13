@@ -33,7 +33,7 @@ export interface IProperties {
   envelope: IEnvelope[],
   oscillators: IOscillator[],
   savedChords: string[][],
-  savedPattern: number[][] | number[],
+  savedPattern: number[][]
 }
 
 export type SynthRefLike = {
@@ -71,7 +71,8 @@ const PolySynth = React.memo(function PolySynth({
   } = polySynth(Tone);
 
   const [instrument, setInstrument] = useState(_instrument);
-  const [synth, setSynth]: [Tone.PolySynth | null, React.Dispatch<SetStateAction<null>>] = useState(null);
+  // TODO: Help request
+  const [synth, setSynth]: [Tone.PolySynth | null, React.Dispatch<any>] = useState(null);
   const [chords, setChords] = useState(savedChords);
   const [pattern, setPattern] = useState(savedPattern);
 
@@ -188,6 +189,7 @@ const PolySynth = React.memo(function PolySynth({
 
   const handleSelectInstrument = (option) => setInstrument(option);
 
+  // TODO: Help request
   const menuOptions: IMenuOptions = [];
 
   return (
