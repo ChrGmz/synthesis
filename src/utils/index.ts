@@ -4,6 +4,9 @@ import { Effect } from '../context/stateReducer';
 const { Scale, Chord, Note } = require('@tonaljs/tonal');
 import * as Tone from 'tone';
 
+export type TimeoutRef = {
+  current: ReturnType<typeof setTimeout> | null,
+}
 
 function randomChordProgression(root: string = 'C', octave: number = 4, scale: string) {
   const scaleName: string = `${root} ${scale}`;
@@ -75,8 +78,8 @@ function shuffle(arr: (string | number)[]): (string | number)[] {
 }
 
 // TODO: Not sure how to refactor--add any to timeoutRef to rm errors
-function useDebounce<F extends Function>(fn: F, timeout: number = 1000) {
-  let timeoutRef: any = useRef<HTMLElement | null>(null);
+function useDebounce(fn: Function, timeout: number = 1000) {
+  let timeoutRef: TimeoutRef = useRef(null);
 
   return (...args: any[]) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);

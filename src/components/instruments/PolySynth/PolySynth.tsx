@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import * as Tone from 'tone';
+import { IAction, IInstrument } from '../../../context/stateReducer';
 
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
 import Sequencer from '../../Sequencer/Sequencer';
@@ -11,6 +13,28 @@ import styles from './PolySynth.module.scss';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
+interface IPolySynth {
+  Tone: typeof Tone,
+  dispatch: React.Dispatch<IAction>,
+  active: boolean,
+  properties: ,
+  instrument: IInstrument,
+  subCategory: string
+}
+
+interface IProperties {
+  effects: ,
+  id: ,
+  volume: ,
+  bars: ,
+  subdivisions: ,
+  octave: ,
+  envelope: ,
+  oscillators: ,
+  savedChords = [],
+  savedPattern = [],
+}
+
 const PolySynth = React.memo(function PolySynth({
   Tone,
   dispatch,
@@ -18,7 +42,7 @@ const PolySynth = React.memo(function PolySynth({
   properties,
   instrument: _instrument,
   subCategory,
-}) {
+}: IPolySynth) {
   const {
     effects,
     id,

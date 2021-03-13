@@ -4,10 +4,11 @@ import Select from '../../Select/Select';
 
 import { Mute, Sound } from '../../../resources/icons';
 import styles from './InstrumentContainer.module.scss';
+import { TimeoutRef } from '../../../utils';
 
 interface IMenuOptions {
   name: string,
-  method: () => void | ((a: number) => void),
+  method: ((a?: number) => void),
   args?: [number] | []
 }
 
@@ -32,7 +33,7 @@ function InstrumentContainer({
 }: IInstrumentContainer) {
   const [menu, setMenu] = useState(false);
 
-  const timeoutRef = useRef(null);
+  const timeoutRef: TimeoutRef = useRef(null);
 
   function renderMenu() {
     return menuOptions.map((option, idx) => {
