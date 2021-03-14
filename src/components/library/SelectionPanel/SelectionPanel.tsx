@@ -9,6 +9,7 @@ import { useDebounce } from '../../../utils';
 import { getSampleNames } from '../../../api';
 import styles from './SelectionPanel.module.scss';
 import { IAction } from '../../../context/stateReducer';
+import { EnumSynth } from '../../instruments/PolySynth/polySynthBuilder';
 
 interface ISelectionPanel {
   Tone: typeof Tone,
@@ -34,6 +35,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
   useEffect(() => {
     getSampleNames().then((res) => {
       console.log(res);
+      // TODO: need to ask for api
       const _samples = Object.values(res).flat(1);
       const _subCategories = Object.keys(res);
 
@@ -44,6 +46,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
     //eslint-disable-next-line
   }, []);
 
+  // TODO: how do useStates?
   function handleSubCategory(subCategory) {
     setActiveSubCategory(
       activeSubCategory !== subCategory ? subCategory : null
@@ -63,7 +66,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
     });
   }
 
-  function handleSelectInstrument(category, subCategory, instrument) {
+  function handleSelectInstrument(category: string, subCategory: string, instrument: EnumSynth) {
     activeInstrumentId
       ? dispatch({
           type: 'UPDATE_ACTIVE_INSTRUMENT',
@@ -114,9 +117,10 @@ const SelectionPanel = React.memo(function SelectionPanel({
 
   const handleSearch = useDebounce(function (event) {
     event.preventDefault();
-
+    
     const { value } = event.target;
     setSearch(value);
+
   }, 500);
 
   const debouncedHandleChangeFn = useDebounce(setVolume, 250);
@@ -162,6 +166,7 @@ compareActiveInstrument);
 
 export default SelectionPanel;
 
+// TODO: Referenced at end of react component
 function compareActiveInstrument(prevProps, newProps) {
   return (
     prevProps.activeInstrumentId === newProps.activeInstrumentId &&

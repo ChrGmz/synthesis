@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import * as Tone from 'tone';
 
 import { useDebounce } from '../../../utils';
+import { EnumSynth } from '../../instruments/PolySynth/polySynthBuilder';
 
 import styles from './SelectionItems.module.scss';
 
@@ -10,8 +11,12 @@ interface ISelectionItems {
   volume: number,
   category: string,
   subCategory: string,
-  instrument: ,
-  handleSelectInstrument: ,
+  instrument: EnumSynth,
+  handleSelectInstrument: (a: string, b?: string, c?: string) => void,
+}
+
+type PrevSampleRef = {
+  current: Tone.Sampler | null,
 }
 
 function SelectionItems({
@@ -22,7 +27,7 @@ function SelectionItems({
   instrument,
   handleSelectInstrument,
 }: ISelectionItems) {
-  const prevSample = useRef(null);
+  const prevSample: PrevSampleRef = useRef(null);
 
   const handleClick = useDebounce(
     category === 'sampler' ? handleSample : handleSynth,

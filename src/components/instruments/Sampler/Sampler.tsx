@@ -208,22 +208,26 @@ compareChanges);
 
 export default Sampler;
 
-function _shiftPatternRight(pattern) {
+function _shiftPatternRight(pattern: string[][]) {
   const _pattern = [...pattern];
 
   const lastEl = _pattern.pop();
 
-  _pattern.unshift(lastEl);
+  if (lastEl) {
+    _pattern.unshift(lastEl);
+  }
 
   return _pattern;
 }
 
-function _shiftPatternLeft(pattern) {
+function _shiftPatternLeft(pattern: string[][]) {
   const _pattern = [...pattern];
 
   const firstEl = _pattern.shift();
 
-  _pattern.push(firstEl);
+  if (firstEl) {
+    _pattern.push(firstEl);
+  }
 
   return _pattern;
 }

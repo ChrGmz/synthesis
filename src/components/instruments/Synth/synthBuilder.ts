@@ -1,5 +1,13 @@
+import { IEffects, IEnvelope, IOscillator } from '../../../context/stateReducer';
 import { createArr } from '../../../utils';
+import { EnumSynth } from '../PolySynth/polySynthBuilder';
 
+interface ISynthOscillator {
+  oscVol: number,
+  oscType: string
+}
+
+// TODO: no me gusta typeof Tone
 export default function synthBuilder(Tone) {
   return {
     createSynth,
@@ -9,12 +17,13 @@ export default function synthBuilder(Tone) {
   };
 
   function createSynth(
-    instrument,
-    envelope = [],
-    volume,
-    effects,
-    oscillator,
-    mute
+    instrument: EnumSynth,
+    // TODO: took out '=[]' from envelope
+    envelope: IEnvelope[],
+    volume: number,
+    effects: IEffects[],
+    oscillator: ISynthOscillator,
+    mute: boolean
   ) {
     const [attack, decay, sustain, release] = envelope;
     const { oscVol, oscType } = oscillator;
@@ -41,7 +50,8 @@ export default function synthBuilder(Tone) {
     return _synth;
   }
 
-  function createSynthSequence(synth, progression, bars: number, subdivisions: number) {
+
+  function createSynthSequence(synth: typeof Tone.Synth, progression: (string | number)[], bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(
@@ -62,7 +72,7 @@ export default function synthBuilder(Tone) {
     return sequence;
   }
 
-  function createArpeggiatorSequence(synth, progression) {
+  function createArpeggiatorSequence(synth: typeof Tone.Synth, progression: (string | number)[]) {
     const sequence = new Tone.Pattern(
       (time: number, note: string) => {
         synth.triggerAttackRelease(note, '8n', time);
@@ -90,13 +100,13 @@ export default function synthBuilder(Tone) {
   //   return sequence;
   // }
 
-  function setNewOctaveToProgression(progression: string[], octave) {
+  function setNewOctaveToProgression(progression: (string | number)[], octave: number) {
     return progression.map(
-      (note) => typeof note === 'string' && note.replace(/[0-9]/g, octave)
+      (note) => typeof note === 'string' && note.replace(/[0-9]/g, String(octave))
     );
   }
 
-  function mapEffects(effects) {
+  function mapEffects(effects: IEffects[]) {
     return effects.map((_effect) => _effect.method);
   }
 }

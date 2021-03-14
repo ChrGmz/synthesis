@@ -2,11 +2,13 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 import styles from './Switch.module.scss';
+import { Effect } from '../../../context/stateReducer';
 
+// TODO: put temp types, need to confirm
 interface ISwitch {
   active: boolean,
-  handleEffect: ,
-  effect: 
+  handleEffect: (a: Effect, b: boolean) => void,
+  effect: Effect
 }
 
 function Switch({ active, handleEffect, effect }: ISwitch) {

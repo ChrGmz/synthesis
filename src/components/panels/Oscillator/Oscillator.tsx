@@ -12,7 +12,7 @@ interface IOscillatorPanelArguments {
 function Oscillator({ dispatch }: IOscillatorPanelArguments): JSX.Element {
   const options = ['sine', 'square', 'sawtooth', 'triangle'];
 
-  function handleOscillator(oscType) {
+  function handleOscillator(oscType: string) {
     dispatch({ type: 'UPDATE_OSCILLATOR', oscType });
   }
 

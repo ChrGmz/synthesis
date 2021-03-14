@@ -2,6 +2,7 @@ import { createArr } from '../../../utils';
 import * as Tone from 'tone';
 import { IEffects } from '../../../context/stateReducer';
 
+// TODO: tone again
 export default function samplerBuilder(Tone) {
   return {
     createSample,
@@ -39,7 +40,7 @@ export default function samplerBuilder(Tone) {
     });
   }
 
-  function createSequence(sample, pattern, bars: number, subdivisions: number, humanize) {
+  function createSequence(sample: typeof Tone.Sampler, pattern: (string | number)[], bars: number, subdivisions: number, humanize: boolean | string) {
     const totalTiles = bars * subdivisions;
     const note = 'F1';
 

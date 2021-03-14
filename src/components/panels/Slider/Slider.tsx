@@ -5,13 +5,13 @@ import { useDebounce } from '../../../utils';
 import styles from './Slider.module.scss';
 
 interface ISlider {
-  handleChangeFn: ,
+  handleChangeFn: ((a: number) => void) | (() => null),
   min: number,
   max: number,
-  step: number,
-  label: ,
-  defaultVal: ,
-  noRotate: boolean,
+  step?: number,
+  label: any,
+  defaultVal: number,
+  noRotate?: boolean,
 }
 
 function Slider({
@@ -22,7 +22,7 @@ function Slider({
   label,
   defaultVal,
   noRotate = false,
-}) {
+}: ISlider) {
   const [value, setValue] = useState(defaultVal);
 
   //If default val changes (because there is a new active instrument for example), the slider position should change
@@ -50,12 +50,12 @@ function Slider({
         className={styles.slider}
         id="myRange"
         onChange={handleChange}
-        style={{ transform: noRotate && 'rotate(0deg)' }}
+        style={ noRotate ? { transform:  'rotate(0deg)' } : {}}
       />
       <label htmlFor="input">
         <h3
           className={styles.sliderLabel}
-          style={{ transform: noRotate && 'rotate(0deg)' }}
+          style={ noRotate ? { transform:  'rotate(0deg)' } : {}}
         >
           {label}
         </h3>
