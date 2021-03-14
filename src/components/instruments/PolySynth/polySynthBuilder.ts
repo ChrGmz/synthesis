@@ -1,5 +1,19 @@
+import { IEffects, IEnvelope, IInstrument, IOscillator } from '../../../context/stateReducer';
 import { createArr } from '../../../utils';
+import * as Tone from 'tone';
+import { ISynth } from '../Synth/Synth';
 
+export enum EnumSynth {
+  Synth = 'Synth',
+  AMSynth = 'AMSynth',
+  DuoSynth = 'DuoSynth',
+  FMSynth = 'FMSynth',
+  MembraneSynth = 'MembraneSynth',
+  MetalSynth = 'MetalSynth',
+  MonoSynth = 'MonoSynth'
+}
+
+// TODO: Tone not taking typeof Tone
 export default function synthBuilder(Tone) {
   const synths = ['Synth', 'AMSynth', 'DuoSynth', 'MembraneSynth'];
 
@@ -13,12 +27,12 @@ export default function synthBuilder(Tone) {
   };
 
   function createSynth(
-    instrument,
-    // TODO: took out '= []' 
-    envelope,
-    volume,
-    effects,
-    oscillators
+    instrument: EnumSynth,
+    // TODO: took out '= []' from envelope
+    envelope: IEnvelope[],
+    volume: number,
+    effects: IEffects[],
+    oscillators: IOscillator
   ) {
     const [attack, decay, sustain, release] = envelope;
     const _synth = new Tone.PolySynth(Tone[instrument], {
@@ -39,7 +53,7 @@ export default function synthBuilder(Tone) {
     return _synth;
   }
 
-  function createSynthSequence(synth, chords, bars: number, subdivisions: number) {
+  function createSynthSequence(synth: typeof Tone.Synth, chords: string[][], bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(
@@ -57,27 +71,27 @@ export default function synthBuilder(Tone) {
 
     return sequence;
   }
-  function addNoteToChord(chords, note: string, col: number) {
+  function addNoteToChord(chords: string[][], note: string, col: number) {
     return chords.map((chord, idx) => {
       if (idx !== col) return chord;
       else return [...chord, note];
     });
   }
 
-  function removeNoteFromChord(chords, note: string, col: number) {
+  function removeNoteFromChord(chords: string[][], note: string, col: number) {
     return chords.map((chord, idx) => {
       if (idx !== col) return chord;
       else return chord.filter((_note) => _note !== note);
     });
   }
 
-  function setNewOctaveToChords(chords, octave: number) {
+  function setNewOctaveToChords(chords: string[][], octave: number) {
     return chords.map((chord) =>
-      chord.map((el) => el.replace(/[0-9]/g, octave))
+      chord.map((el) => el.replace(/[0-9]/g, String(octave)))
     );
   }
 
-  function mapEffects(effects) {
+  function mapEffects(effects: IEffects[]) {
     return effects.map((_effect) => _effect.method);
   }
 }

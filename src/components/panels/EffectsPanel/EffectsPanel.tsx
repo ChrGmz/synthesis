@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IEffectsList } from '../../../context/GlobalState.context';
-import { IAction, IEffects } from '../../../context/stateReducer';
+import { IAction, IEffects, Effect } from '../../../context/stateReducer';
 
 import { ArrowU, ArrowD } from '../../../resources/icons';
 
@@ -16,15 +16,15 @@ interface IEffectsPanelArguments {
 function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffectsPanelArguments): JSX.Element {
   const [effects, setActiveEffects] = useState(effectsList);
 
-  function handleEffect(effect, active: boolean) {
+  function handleEffect(effect: Effect, active: boolean) {
     active ? handleRemoveEffect(effect) : handleAddEffect(effect);
   }
 
-  function handleAddEffect(effect) {
+  function handleAddEffect(effect: Effect) {
     dispatch({ type: 'ADD_EFFECT_TO_INSTRUMENT', effect });
   }
 
-  function handleRemoveEffect(effect) {
+  function handleRemoveEffect(effect: Effect) {
     dispatch({ type: 'REMOVE_EFFECT_FROM_INSTRUMENT', effect });
   }
 

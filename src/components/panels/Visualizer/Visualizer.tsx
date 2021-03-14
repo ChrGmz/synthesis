@@ -11,6 +11,10 @@ interface IVisualizer {
   playing: boolean
 }
 
+export type LineRef = {
+  current: SVGPathElement[] | null
+}
+
 function Visualizer({ Tone, playing }: IVisualizer) {
   const lineRef = useRef([]);
 

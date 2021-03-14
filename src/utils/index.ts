@@ -89,7 +89,7 @@ function useDebounce(fn: Function, timeout: number = 1000) {
   };
 }
 
-function createArr(n: number, fill: number | null = 0, cb = (el: number, index: number) => el)  {
+function createArr(n: number, fill: number | null = 0, cb = (el: any, index: number) => el): any[]  {
   const arr: number[] = Array(n).fill(fill).map(cb);
   return arr;
 }

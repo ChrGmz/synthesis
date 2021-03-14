@@ -3,7 +3,12 @@ import Slider from '../Slider/Slider';
 
 import styles from './EnvelopePanel.module.scss';
 
-function EnvelopePanel({ handleVolume, volume }) {
+interface IEnvelopePanel {
+  handleVolume: number,
+  volume: number,
+} 
+
+function EnvelopePanel({ handleVolume, volume }: IEnvelopePanel) {
   return (
     <div className={styles.subPanelContainer}>
       <Slider

@@ -14,15 +14,16 @@ import {
 } from '../../../utils';
 import synthBuilder from './synthBuilder';
 import styles from './Synth.module.scss';
+import { EnumSynth } from '../PolySynth/polySynthBuilder';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-interface ISynth {
+export interface ISynth {
   Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   active: boolean,
   properties: IPropertiesSynth,
-  instrument: IInstrument,
+  instrument: EnumSynth,
   subCategory: string
 }
 
@@ -55,9 +56,11 @@ const Synth = React.memo(function Synth({
     createSynthSequence,
     createArpeggiatorSequence,
     setNewOctaveToProgression,
-    options,
+    // TODO: didn't see where this is used
+    // options,
   } = synthBuilder(Tone);
 
+  // TODO: Help request
   const [synth, setSynth] = useState(null);
   const [instrument, setInstrument] = useState(_instrument);
   const [arpeggiator, setArpeggiator] = useState(false);
@@ -103,7 +106,7 @@ const Synth = React.memo(function Synth({
     _progression[col] = progression[col] !== note ? note : 0;
 
     const _pattern = pattern.map((patternRow, currRow) => {
-      return patternRow.map((el: number, idx: number) => {
+      return patternRow.map((el, idx) => {
         if (idx !== col) return el;
         else if (row === currRow && el === 0) return note;
         else return 0;
@@ -160,7 +163,7 @@ const Synth = React.memo(function Synth({
   const handleDeleteInstrument = () =>
     dispatch({ type: 'DELETE_INSTRUMENT', id });
 
-  const handleSelectInstrument = (option) => setInstrument(option);
+  const handleSelectInstrument = (option: EnumSynth) => setInstrument(option);
 
   const handleMute = () => setMute(!mute);
 
@@ -204,7 +207,8 @@ const Synth = React.memo(function Synth({
             handleSelectInstrument={handleSelectInstrument}
             handleActiveInstrument={handleActiveInstrument}
             handleDeleteInstrument={handleDeleteInstrument}
-            options={options}
+            // TODO: did not find where options is used
+            // options={options}
             name={`${subCategory} | ${_instrument}`}
             active={active}
           />
@@ -226,8 +230,8 @@ compareChanges);
 
 export default Synth;
 
-function getIndexOfNotes(progression: string[]) {
-  return progression.map((note, i: number) => {
+function getIndexOfNotes(progression: (string)[]) {
+  return progression.map((note, i) => {
     return notes.indexOf(note.replace(/[0-9]/g, ''));
   });
 }

@@ -6,9 +6,9 @@ import styles from './PanelModuleContainer.module.scss';
 
 interface IPanelModuleContainer {
   name: string,
-  border: ,
-  children: ,
-  flex: string
+  border: boolean,
+  children: any,
+  flex?: string
 } 
 
 function PanelModuleContainer({ name, border, children, flex = 'column' }: IPanelModuleContainer) {

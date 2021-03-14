@@ -41,7 +41,8 @@ interface IAction {
   volume?: number,
   id?: string,
   bars?: string,
-  octave?: number
+  octave?: number,
+  oscType?: string
 }
 
 interface IInstrument {

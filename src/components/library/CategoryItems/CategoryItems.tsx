@@ -2,8 +2,9 @@ import React from 'react';
 import styles from './CategoryItems.module.scss';
 
 interface ICategoryItems {
-  category: ,
-  handleSubCategory: ,
+  // TODO: putting as string for now. connected to SelectionPanel
+  category: string,
+  handleSubCategory: (a: string) => void,
   active: boolean
 }
 
