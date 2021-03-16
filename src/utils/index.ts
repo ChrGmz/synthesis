@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import effectsList from '../components/effects';
 import { Effect } from '../context/stateReducer';
-const { Scale, Chord, Note } = require('@tonaljs/tonal');
 import * as Tone from 'tone';
 
+const { Scale, Chord, Note } = require('@tonaljs/tonal');
 export type TimeoutRef = {
   current: ReturnType<typeof setTimeout> | null,
 }

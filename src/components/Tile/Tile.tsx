@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 
 interface ITile {
   instrument: AnySynth | Tone.PolySynth | Tone.Sampler | null,
-  note: string,
+  note?: string,
   active: boolean,
   row: number,
   col: number,
@@ -26,18 +26,27 @@ function Tile({
 }: ITile) {
   function handlePlay() {
     if (active) return;
-    instrument?.triggerAttackRelease(note, 0.5);
+    if (note) {
+      instrument?.triggerAttackRelease(note, 0.5);
+    }
   }
 
   function handleMouseDown() {
-    handlePlay();
-    toggleActive(col, row, note);
-    handlePainting();
+    if (note) {
+      handlePlay();
+      toggleActive(col, row, note);
+      handlePainting();
+    } else {
+      handlePlay();
+      handlePainting();
+    }
   }
 
   function handleMouseEnter() {
     if (isPainting === false) return;
-    toggleActive(col, row, note);
+    if (note) {
+      toggleActive(col, row, note);
+    }
   }
 
   return (

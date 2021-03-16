@@ -10,13 +10,9 @@ interface IVisualizer {
   playing: boolean,
 }
 
-// TODO: HELP REQUEST: How to setup this useRef
-export type LineRef = {
-  current: 
-}
 
 function Visualizer({ playing }: IVisualizer) {
-  const lineRef = useRef([]);
+  const lineRef = useRef<SVGPathElement[]>(null);
 
   useEffect(() => {
     const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.5, paused: playing });
@@ -46,9 +42,10 @@ function Visualizer({ playing }: IVisualizer) {
       'x+=.3'
     );
 
-    return () => tl.kill();
+    return () => { tl.kill() };
   }, [playing]);
 
+  // TODO: Monitor
   function renderSvgPaths() {
     return createArr(9, null, (_, idx) => {
       const isEven = idx % 2 === 0;
@@ -60,7 +57,12 @@ function Visualizer({ playing }: IVisualizer) {
           d={`M${o} ${v}`}
           id="line"
           key={o}
-          ref={(el) => (lineRef.current[idx] = el)}
+          ref={(el) => {
+              if (lineRef.current && el) {
+                lineRef.current[idx] = el
+              }
+            }
+          }
         />
       );
     });

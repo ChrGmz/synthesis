@@ -8,25 +8,27 @@ import styles from './ChartADSR.module.scss';
 import { useEffect } from 'react';
 
 interface IChartADSRArgument {
-  envelope?: IEnvelope,
+  envelope: IEnvelope,
   dispatch: React.Dispatch<IAction> 
 }
 
 function ChartADSR({ envelope, dispatch }: IChartADSRArgument ): JSX.Element {
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState<number[]>([]);
   const labels = ['A', 'D', 'S', 'R'];
 
-  const onDragEnd = useDebounce(function (_, __, idx: number, value: number) {
+  const onDragEnd = useDebounce(function (_: any, __: any, idx: number, value: number) {
     const val = clamp(labels[idx], value);
     const _values = [...values];
 
-    _values[idx] = val;
+    if (val) {
+      _values[idx] = val;
+    }
 
-    dispatch({ type: 'SET_ENVELOPE', values: _values });
+    dispatch({ type: 'SET_ENVELOPE', envelope: _values });
   }, 100);
 
   useEffect(() => {
-    setValues(envelope);
+    setValues(Object.values(envelope));
   }, [envelope]);
 
   const data = {

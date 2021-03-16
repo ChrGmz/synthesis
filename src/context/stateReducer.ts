@@ -45,7 +45,8 @@ interface IAction {
   id?: string,
   bars?: string,
   octave?: number,
-  oscType?: string
+  oscType?: string,
+  envelope?: number[],
 }
 
 interface IInstrument {
@@ -127,7 +128,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
     }
 
     case 'UPDATE_ACTIVE_INSTRUMENT': {
-      const { type, category, ...otherProperties } = action;
+      const { type, category, volume, bars, envelope, ...otherProperties } = action;
       const { instruments, activeInstrumentId } = state;
       let categoryErrorFlag = false;
 
@@ -164,7 +165,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
     }
 
     case 'UPDATE_INSTRUMENT_VOLUME': {
-      const { volume } = action;
+      const { volume = 0 } = action;
       const { instruments, activeInstrumentId } = state;
 
       const _instruments = instruments.map((_instrument) => {
@@ -173,7 +174,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
         return { ..._instrument, volume: volume };
       });
 
-      return {
+      return  {
         ...state,
         instruments: _instruments,
       };
@@ -204,7 +205,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
     case 'SET_BARS': {
       const { bars } = action;
       const { instruments, activeInstrumentId, maxBars } = state;
-      const _bars: number = fractionStrToDecimal(bars);
+      const _bars: number = bars ? fractionStrToDecimal(bars) : 1;
 
       const _instruments = instruments.map((_instrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
@@ -220,7 +221,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
     }
 
     case 'SET_OCTAVE': {
-      const { octave } = action;
+      const { octave = 3 } = action;
       const { instruments, activeInstrumentId } = state;
 
       const _instruments = instruments.map((_instrument) => {
@@ -236,13 +237,18 @@ export default function stateReducer(state: IState, action: IAction): IState {
     }
 
     case 'SET_ENVELOPE': {
-      const { values } = action;
+      const { envelope = [] } = action;
       const { instruments, activeInstrumentId } = state;
 
       const _instruments = instruments.map((_instrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
 
-        return { ..._instrument, envelope: values };
+        return { ..._instrument, envelope: [{
+          attack: envelope[0],
+          decay: envelope[1],
+          sustain: envelope[2],
+          release: envelope[3],
+        }] };
       });
 
       return {
@@ -359,8 +365,13 @@ export default function stateReducer(state: IState, action: IAction): IState {
   }
 }
 
-function fractionStrToDecimal(str: any): number {
-  return str.split('/').reduce((p: number, c: number) => p / c);
+// function fractionStrToDecimal(str: string): number {
+//   return str.split('/').reduce((p: number, c: string) => p / +c, 1);
+// }
+
+export function fractionStrToDecimal(fraction: string) {
+  const [a, b] = fraction.match(/\d+/g)?.map(Number) || [NaN, NaN];
+  return a / b;
 }
 
 export { IInstrument, IAction, Effect, IEffects, IEnvelope };

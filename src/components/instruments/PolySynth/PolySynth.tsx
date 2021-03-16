@@ -14,7 +14,7 @@ import styles from './PolySynth.module.scss';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-interface IPolySynth {
+export interface IPolySynth {
   dispatch: React.Dispatch<IAction>,
   active: boolean,
   properties: IInstrument,
