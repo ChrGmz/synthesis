@@ -5,7 +5,7 @@ import * as Tone from 'tone';
 
 import synthSubCategoryOptions from '../components/instruments/Synth/synthOptions';
 import { resolveEffect } from '../utils';
-import { AnyEffect } from './GlobalState.context';
+import { AnyEffect, IEffectsList } from './GlobalState.context';
 import { EnumSynth } from '../components/instruments/PolySynth/polySynthBuilder';
 import { ISynthOscillator } from '../components/instruments/Synth/synthBuilder';
 

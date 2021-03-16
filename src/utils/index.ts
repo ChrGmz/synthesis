@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import effectsList from '../components/effects';
 import { Effect } from '../context/stateReducer';
 import * as Tone from 'tone';
+import { IEffectsList } from '../context/GlobalState.context';
 
 const { Scale, Chord, Note } = require('@tonaljs/tonal');
 export type TimeoutRef = {
@@ -169,6 +170,12 @@ function resolveEffect (eff: Effect) {
       return {
         name: 'FeedbackDelay',
         method: new Tone.FeedbackDelay(...effectsList.FeedbackDelay),
+      }
+
+    case 'Vibrato' :
+      return {
+        name: 'Vibrato',
+        method: new Tone.Vibrato(...effectsList.FeedbackDelay),
       }
   }
 }

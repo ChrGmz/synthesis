@@ -9,7 +9,7 @@ interface IStateContext {
   dispatch: React.Dispatch<IAction>
 }
 
-export type AnyEffect = Tone.Distortion | Tone.Phaser | Tone.Compressor | Tone.Filter | Tone.Tremolo | Tone.PitchShift | Tone.Reverb | Tone.Delay | Tone.Freeverb | Tone.FeedbackDelay | Tone.Volume;
+export type AnyEffect = Tone.Distortion | Tone.Phaser | Tone.Compressor | Tone.Filter | Tone.Tremolo | Tone.PitchShift | Tone.Reverb | Tone.Delay | Tone.Freeverb | Tone.FeedbackDelay | Tone.Volume | Tone.Vibrato;
 
 export interface IEffectsList {
   distortion?: Tone.Distortion,
@@ -22,7 +22,8 @@ export interface IEffectsList {
   delay?: Tone.PingPongDelay,
   freeverb?: Tone.Freeverb,
   feedback?: Tone.FeedbackDelay,
-  volume?: Tone.Volume
+  volume?: Tone.Volume,
+  vibrato?: Tone.Vibrato
 }
 
 const StateContext = createContext<IStateContext | null>(null);

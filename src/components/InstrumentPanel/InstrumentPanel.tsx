@@ -101,6 +101,7 @@ function InstrumentPanel({ dispatch, activeInstrument, effectsList }: IInstrumen
   }
 
   function renderPanels() {
+    console.log(activePanels, 'que es active panels');
     return activePanels.slice(0, 4).map((_panel, idx) => {
       const newPanel = React.createElement(panelModules[_panel] as string | React.FunctionComponent, {
         ...moduleProps[_panel],

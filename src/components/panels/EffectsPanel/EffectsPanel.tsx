@@ -10,11 +10,12 @@ import styles from './EffectsPanel.module.scss';
 interface IEffectsPanelArguments {
   activeInstrumentEffects: IEffects[],
   dispatch: React.Dispatch<IAction>,
-  effectsList: Effect[]
+  effectsList: Effect[] | string
 }
 
 function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffectsPanelArguments): JSX.Element {
-  const [effects, setActiveEffects] = useState(effectsList);
+  
+  const [effects, setActiveEffects] = useState(Object.keys(effectsList) as Effect[]);
 
   function handleEffect(effect: Effect, active: boolean) {
     active ? handleRemoveEffect(effect) : handleAddEffect(effect);
@@ -29,7 +30,7 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
   }
 
   function renderEffects() {
-    console.log(effects, 'effects from me');
+    console.log(effects, 'que es effects');
     return effects.slice(0, 3).map((_effect, idx: number) => {
       //check if effect is included in the effects of the active instrument and if so set it to active
       const active =
@@ -37,11 +38,11 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
         activeInstrumentEffects.some((_eff) => _eff.name === _effect);
 
       return (
-        <div className={styles.effect} key={_effect}>
+        <div className={styles.effect} key={`${_effect}+1`}>
           <p
             onClick={() => handleEffect(_effect, active)}
             className={active ? styles.activeTitle : null}
-            key={_effect}
+            key={`${_effect}+2`}
           >
             {_effect}
           </p>
