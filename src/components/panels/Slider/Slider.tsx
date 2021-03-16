@@ -5,7 +5,7 @@ import { useDebounce } from '../../../utils';
 import styles from './Slider.module.scss';
 
 interface ISlider {
-  handleChangeFn: ((a: number) => void) | (() => null),
+  handleChangeFn: ((value: number) => void) | (() => null),
   min: number,
   max: number,
   step?: number,

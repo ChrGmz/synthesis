@@ -10,7 +10,7 @@ import styles from './EffectsPanel.module.scss';
 interface IEffectsPanelArguments {
   activeInstrumentEffects: IEffects[],
   dispatch: React.Dispatch<IAction>,
-  effectsList: IEffectsList[]
+  effectsList: Effect[]
 }
 
 function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffectsPanelArguments): JSX.Element {
@@ -29,6 +29,7 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
   }
 
   function renderEffects() {
+    console.log(effects, 'effects from me');
     return effects.slice(0, 3).map((_effect, idx: number) => {
       //check if effect is included in the effects of the active instrument and if so set it to active
       const active =
@@ -36,11 +37,11 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
         activeInstrumentEffects.some((_eff) => _eff.name === _effect);
 
       return (
-        <div className={styles.effect} key={_effect.name}>
+        <div className={styles.effect} key={_effect}>
           <p
             onClick={() => handleEffect(_effect, active)}
             className={active ? styles.activeTitle : null}
-            key={_effect.name}
+            key={_effect}
           >
             {_effect}
           </p>
@@ -52,6 +53,7 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
   function handleUp() {
     const _effects = [...effects];
     const _effect = _effects.pop();
+    if (_effect)
     _effects.unshift(_effect);
 
     setActiveEffects(_effects);
@@ -60,6 +62,7 @@ function EffectsPanel({ activeInstrumentEffects, dispatch, effectsList }: IEffec
   function handleDown() {
     const _effects = [...effects];
     const _effect = _effects.shift();
+    if (_effect)
     _effects.push(_effect);
 
     setActiveEffects(_effects);

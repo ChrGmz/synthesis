@@ -29,7 +29,7 @@ export default function synthBuilder() {
     mute: boolean
   ) {
     const [attack, decay, sustain, release] = envelope;
-    const { oscVol, oscType } = oscillator;
+    // const { oscVol, oscType } = oscillator;
 
     const _synth = new Tone[instrument](synthSubCategoryOptions[instrument]);
 

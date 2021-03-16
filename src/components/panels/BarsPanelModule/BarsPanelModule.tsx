@@ -4,11 +4,11 @@ import Select from '../../Select/Select';
 import styles from './BarsPanelModule.module.scss';
 
 interface IBarsPanelArguments {
-  handleMaxTiles: (a: string) => void,
+  handleMaxTiles: (_bars: string) => void,
   barsOptions: string[],
-  getOptionsIdx: (a: number) => number,
+  getOptionsIdx: (num: number) => number,
   bars: number,
-  handleOctave: (a: number) => void,
+  handleOctave: (_octave: number) => void,
   octaveOptions: number[],
   octave: number
 }
@@ -31,11 +31,11 @@ function BarsPanelModule({
         initialOption={barsOptions[getOptionsIdx(bars)]}
       />
       <label className={styles.label}>Octave</label>
-      <Select
+      {/* <Select
         onChangeFn={handleOctave}
         options={octaveOptions}
         initialOption={octave}
-      />
+      /> */}
     </div>
   );
 }

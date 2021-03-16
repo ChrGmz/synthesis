@@ -3,7 +3,7 @@ import { IInstrument } from './stateReducer';
 import effectsList from '../components/effects';
 import { IEffectsList } from './GlobalState.context';
 
-interface IState {
+export interface IState {
   master: {
     effects: any[],
     volume: number,
@@ -19,5 +19,3 @@ interface IState {
 }
 
 const keys: string[] = Object.keys(effectsList);
-
-export { IState };

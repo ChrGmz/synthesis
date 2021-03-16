@@ -5,7 +5,7 @@ import { instrumentComponents } from '../instruments';
 import TransportPosition from '../panels/TransportPosition/TransportPosition';
 
 import styles from './Playground.module.scss';
-import { IAction, IInstrument, IInstrumentPolySynth, IInstrumentSampler, IInstrumentSynth } from '../../context/stateReducer';
+import { IAction, IInstrument } from '../../context/stateReducer';
 
 interface IPlayground {
   maxBars: number,

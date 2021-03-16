@@ -3,7 +3,7 @@ import styles from './Select.module.scss';
 
 interface ISelect {
   options: string[] | number[],
-  onChangeFn: ((a: string) => void) | ((a: number) => void),
+  onChangeFn: ((_bars: string) => void),
   // defaultOption?: string[],
   initialOption?: string | number,
   maxWidth?: string,

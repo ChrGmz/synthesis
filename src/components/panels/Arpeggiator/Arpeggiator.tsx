@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Switch from '../Switch/Switch';
+// import Switch from '../Switch/Switch';
 
 import styles from './Arpeggiator.module.scss';
 
 function Arpeggiator() {
   return (
     <div>
-      <Switch />
+      {/* <Switch /> */}
     </div>
   );
 }
 
-export default Arpeggiator;
+// export default Arpeggiator;

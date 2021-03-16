@@ -7,7 +7,7 @@ import { Effect } from '../../../context/stateReducer';
 // TODO: put temp types, need to confirm
 interface ISwitch {
   active: boolean,
-  handleEffect: (a: Effect, b: boolean) => void,
+  handleEffect: (effect: Effect, active: boolean) => void,
   effect: Effect
 }
 
@@ -58,7 +58,7 @@ function Switch({ active, handleEffect, effect }: ISwitch) {
       >
         <path
           ref={active ? point : null}
-          className={styles.point}
+          // className={styles.point}
           d="m37 72a35 35 0 1 1 35-35 35.04 35.04 0 0 1 -35 35zm0-68a33 33 0 1 0 33 33 33.037 33.037 0 0 0 -33-33z"
         />
       </svg>
@@ -66,4 +66,4 @@ function Switch({ active, handleEffect, effect }: ISwitch) {
   );
 }
 
-export default Switch;
+// export default Switch;

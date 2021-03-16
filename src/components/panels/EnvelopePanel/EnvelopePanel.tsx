@@ -4,7 +4,7 @@ import Slider from '../Slider/Slider';
 import styles from './EnvelopePanel.module.scss';
 
 interface IEnvelopePanel {
-  handleVolume: number,
+  handleVolume: ((a: number) => void) | (() => null),
   volume: number,
 } 
 

@@ -1,6 +1,6 @@
 import { IInstrumentOption } from "../components/library/SelectionPanel/SelectionPanel";
 
-const PORT = process.env.PORT;
+const PORT = 3001;
 const BASE_URL = `http://localhost:${PORT}`;
 
 async function getSampleNames(): Promise<IInstrumentOption[]> {
