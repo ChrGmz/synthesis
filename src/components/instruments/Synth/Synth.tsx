@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import * as Tone from 'tone';
-import { IAction, IEnvelope, IInstrument, IInstrumentSynth } from '../../../context/stateReducer';
+import { IAction, IInstrument } from '../../../context/stateReducer';
 
 import Sequencer from '../../Sequencer/Sequencer';
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
@@ -11,7 +11,7 @@ import {
   compareChanges,
   randomChordProgression,
 } from '../../../utils';
-import synthBuilder, { ISynthOscillator } from './synthBuilder';
+import synthBuilder from './synthBuilder';
 import styles from './Synth.module.scss';
 import { EnumSynth } from '../PolySynth/polySynthBuilder';
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { IInstrument } from '../../context/stateReducer';
 import { AnySynth } from '../instruments/Synth/Synth';
 import Tile from '../Tile/Tile';
 import * as Tone from 'tone';

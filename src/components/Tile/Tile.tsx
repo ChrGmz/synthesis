@@ -1,15 +1,17 @@
 import React from 'react';
+import { AnySynth } from '../instruments/Synth/Synth';
 import styles from './Tile.module.scss';
+import * as Tone from 'tone';
 
 interface ITile {
-  instrument: ,
-  note: ,
-  active: ,
-  row: ,
-  col: ,
-  toggleActive: (a: number, b: number, c: string) => void,
-  handlePainting: ,
-  isPainting: ,
+  instrument: AnySynth | Tone.PolySynth | Tone.Sampler | null,
+  note: string,
+  active: boolean,
+  row: number,
+  col: number,
+  toggleActive: (col: number, row: number, note: string) => void,
+  handlePainting: () => void,
+  isPainting: boolean,
 }
 
 function Tile({
@@ -24,7 +26,7 @@ function Tile({
 }: ITile) {
   function handlePlay() {
     if (active) return;
-    instrument.triggerAttackRelease(note, 0.5);
+    instrument?.triggerAttackRelease(note, 0.5);
   }
 
   function handleMouseDown() {

@@ -24,12 +24,6 @@ interface ISampler {
   instrument: EnumSynth
 }
 
-// interface IPropertiesSampler extends IProperties {
-//   savedPattern: number[],
-//   subCategory: string,
-//   instrument: string,
-// }
-
 const Sampler = React.memo(function Sampler({
   dispatch,
   active,

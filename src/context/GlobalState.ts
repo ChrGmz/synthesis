@@ -1,6 +1,4 @@
-import { useReducer } from 'react';
-import * as Tone from 'tone';
-import stateReducer, { IInstrument } from './stateReducer';
+import { IInstrument } from './stateReducer';
 
 import effectsList from '../components/effects';
 import { IEffectsList } from './GlobalState.context';
