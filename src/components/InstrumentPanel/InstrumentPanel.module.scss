@@ -1,6 +1,6 @@
-@import '@styles/variables';
-@import '@styles/mixins';
-@import '@styles/svg';
+@import '../../global-styles/_variables.scss';
+@import '../../global-styles/_mixins.scss';
+@import '../../global-styles/_svg.scss';
 
 .container {
   min-height: 20vh;

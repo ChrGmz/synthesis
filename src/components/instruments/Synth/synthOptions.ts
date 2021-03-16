@@ -1,8 +1,8 @@
-const synthOptions = {};
 import { IEnvelope } from '../../../context/stateReducer';
 import { EnumSynth } from '../PolySynth/polySynthBuilder';
 import { ISynthOscillator } from './synthBuilder';
 
+const synthOptions = {};
 export type ADSREnvelope = [number, number, number, number];
 
 export interface SynthOptions {

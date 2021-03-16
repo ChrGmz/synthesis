@@ -1,20 +1,26 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
-import * as Tone from 'tone';
+import React, { ChangeEvent, useEffect, useState } from "react";
+import * as Tone from "tone";
 
-import { synths, polySynths } from '../../instruments';
-import CategoryItems from '../CategoryItems/CategoryItems';
-import SelectionItems from '../SelectionItems/SelectionItems';
-import { useDebounce } from '../../../utils';
+import { synths, polySynths } from "../../instruments";
+import CategoryItems from "../CategoryItems/CategoryItems";
+import SelectionItems from "../SelectionItems/SelectionItems";
+import { useDebounce } from "../../../utils";
 
-import { getSampleNames } from '../../../api';
-import styles from './SelectionPanel.module.scss';
-import { IAction } from '../../../context/stateReducer';
-import { EnumSynth } from '../../instruments/PolySynth/polySynthBuilder';
+import { getSampleNames } from "../../../api";
+import styles from "./SelectionPanel.module.scss";
+import { IAction, IInstrument } from "../../../context/stateReducer";
+import { EnumSynth } from "../../instruments/PolySynth/polySynthBuilder";
 
 interface ISelectionPanel {
-  dispatch: React.Dispatch<IAction>,
-  categoryErrorFlag?: boolean,
-  activeInstrumentId: string | null  
+  dispatch: React.Dispatch<IAction>;
+  categoryErrorFlag?: boolean;
+  activeInstrumentId: string | null;
+}
+
+export interface IInstrumentOption {
+  category: string,
+  subCategory: string,
+  instrument: EnumSynth,
 }
 
 const SelectionPanel = React.memo(function SelectionPanel({
@@ -22,10 +28,15 @@ const SelectionPanel = React.memo(function SelectionPanel({
   categoryErrorFlag,
   activeInstrumentId,
 }: ISelectionPanel) {
-  const [instruments, setInstruments] = useState([...synths, ...polySynths]);
-  const [subCategories, setSubCategories] = useState(['synth', 'polySynth']);
-  const [activeSubCategory, setActiveSubCategory] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
+  const [instruments, setInstruments] = useState<IInstrumentOption[]>([
+    ...synths,
+    ...polySynths,
+  ]);
+  const [subCategories, setSubCategories] = useState(["synth", "polySynth"]);
+  const [activeSubCategory, setActiveSubCategory] = useState<string | null>(
+    null
+  );
+  const [search, setSearch] = useState("");
 
   //handle the volume to test the samples
   const [volume, setVolume] = useState(-15);
@@ -38,13 +49,12 @@ const SelectionPanel = React.memo(function SelectionPanel({
       const _subCategories = Object.keys(res);
 
       setInstruments([...instruments, ..._samples]);
-      
+
       setSubCategories([...subCategories, ..._subCategories]);
     });
     //eslint-disable-next-line
   }, []);
 
-  // TODO: how do useStates?
   function handleSubCategory(subCategory: string) {
     setActiveSubCategory(
       activeSubCategory !== subCategory ? subCategory : null
@@ -64,16 +74,20 @@ const SelectionPanel = React.memo(function SelectionPanel({
     });
   }
 
-  function handleSelectInstrument(category: string, subCategory: string, instrument: EnumSynth) {
+  function handleSelectInstrument(
+    category: string,
+    subCategory: string,
+    instrument: EnumSynth
+  ) {
     activeInstrumentId
       ? dispatch({
-          type: 'UPDATE_ACTIVE_INSTRUMENT',
+          type: "UPDATE_ACTIVE_INSTRUMENT",
           category,
           subCategory,
           instrument,
         })
       : dispatch({
-          type: 'CREATE_INSTRUMENT',
+          type: "CREATE_INSTRUMENT",
           category,
           subCategory,
           instrument,
@@ -112,13 +126,15 @@ const SelectionPanel = React.memo(function SelectionPanel({
       });
   }
 
-  const handleSearch = useDebounce(function (event: ChangeEvent<HTMLSelectElement>) {
+  const handleSearch = useDebounce(function (
+    event: ChangeEvent<HTMLSelectElement>
+  ) {
     event.preventDefault();
-    
+
     const { value } = event.target;
     setSearch(value);
-
-  }, 500);
+  },
+  500);
 
   const debouncedHandleChangeFn = useDebounce(setVolume, 250);
 
@@ -163,8 +179,10 @@ compareActiveInstrument);
 
 export default SelectionPanel;
 
-// TODO: Referenced at end of react component
-function compareActiveInstrument(prevProps: ISelectionPanel, newProps: ISelectionPanel) {
+function compareActiveInstrument(
+  prevProps: ISelectionPanel,
+  newProps: ISelectionPanel
+) {
   return (
     prevProps.activeInstrumentId === newProps.activeInstrumentId &&
     prevProps.categoryErrorFlag === newProps.categoryErrorFlag

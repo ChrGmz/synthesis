@@ -1,5 +1,5 @@
-@import 'global-styles/variables';
-@import 'global-styles/mixins';
+@import '../../global-styles/_variables.scss';
+@import '../../global-styles/_mixins.scss';
 
 .tile {
   @include tiles;
