@@ -8,18 +8,18 @@ import { TimeoutRef } from '../../../utils';
 
 export interface IMenuOptions {
   name: string,
-  method: ((a?: number) => void),
-  args?: [number] | []
+  method: (step?: number) => void,
+  args?: [number]
 }
 
 interface IInstrumentContainer {
   handleActiveInstrument: () => void,
   handleDeleteInstrument: () => void | ((a: any) => void),
   menuOptions: IMenuOptions[],
-  handleMute: () => void,
+  handleMute?: () => void,
   active: boolean,
   name: string,
-  mute: boolean,
+  mute?: boolean,
 }
 
 function InstrumentContainer({
@@ -37,13 +37,13 @@ function InstrumentContainer({
 
   function renderMenu() {
     return menuOptions.map((option, idx) => {
-      const { name, method, args = [] }: IMenuOptions = option;
+      const { name, method, args = [] } = option;
       return (
         <>
           <div
             className={styles.menuOption}
             key={name + idx}
-            onClick={() => method(...args)}
+            onClick={() => args.length ? method(args[0]) : method()}
           >
             <p className={styles.menuOptionName} key={name + idx}>
               {name}

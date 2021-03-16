@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useGlobalState } from '../../context/GlobalState';
+import { useGlobalState } from '../../context/GlobalState.context';
 import InstrumentPanel from '../InstrumentPanel/InstrumentPanel';
 import SelectionPanel from '../library/SelectionPanel/SelectionPanel';
 import MasterPanel from '../MasterPanel/MasterPanel';
+import * as Tone from 'tone';
 
 import styles from './Dashboard.module.scss';
 
@@ -12,7 +13,6 @@ import Playground from '../Playground/Playground';
 function Dashboard() {
   const { state, dispatch } = useGlobalState();
   const {
-    Tone,
     maxBars,
     master,
     effectsList,
@@ -26,13 +26,13 @@ function Dashboard() {
 
   useEffect(() => {
     Tone.Transport.set({
-      bpm: bpm,
+      bpm,
     });
   }, [Tone.Transport, Tone.Transport.bpm, bpm]);
 
   useEffect(() => {
     Tone.Master.set({
-      volume: volume,
+      volume,
     });
   }, [Tone.Master, volume]);
 
@@ -44,18 +44,17 @@ function Dashboard() {
     setPlayState(Tone.Transport.state);
   }, [Tone.Transport, playState]);
 
-  // TODO : Fixed our issue...but
   const activeInstrument = getActiveInstrument(instruments, activeInstrumentId);
 
   const handleKeyPress = useCallback(
     (event: KeyboardEvent) => {
       // changed 'which' to 'key' on lines 48 and 51 as ts stated KeyboardEvent.which is deprecated
+      event.preventDefault();
       const { key } = event;
 
       // changed 
       switch (key) {
         case ' ': {
-          event.preventDefault();
           handleTransport();
           return;
         }
@@ -82,7 +81,6 @@ function Dashboard() {
           <h3>SYNTHESIS</h3>
         </div>
         <SelectionPanel
-          Tone={Tone}
           dispatch={dispatch}
           categoryErrorFlag={categoryErrorFlag}
           activeInstrumentId={activeInstrumentId}
@@ -90,7 +88,6 @@ function Dashboard() {
       </div>
       <div className={styles.panels}>
         <MasterPanel
-          Tone={Tone}
           dispatch={dispatch}
           playState={playState}
           masterProperties={master}
@@ -98,13 +95,11 @@ function Dashboard() {
         />
 
         <InstrumentPanel
-          Tone={Tone}
           dispatch={dispatch}
           effectsList={effectsList}
           activeInstrument={activeInstrument}
         />
         <Playground
-          Tone={Tone}
           maxBars={maxBars}
           dispatch={dispatch}
           instruments={instruments}
@@ -120,7 +115,7 @@ function Dashboard() {
 export default Dashboard;
 
 //Helper functions
-function getActiveInstrument(instruments: IInstrument[], activeInstrumentId: string | boolean | null) {
+function getActiveInstrument(instruments: IInstrument[], activeInstrumentId: string | null) {
   const instrument = instruments.find((_instrument) => {
     return _instrument.id === activeInstrumentId;
   });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import * as Tone from 'tone';
-import { IAction, IEffects, IEnvelope, IInstrument, IOscillator } from '../../../context/stateReducer';
+import { IAction, IEffects, IEnvelope, IInstrument, IInstrumentPolySynth } from '../../../context/stateReducer';
 import { IMenuOptions } from '../InstrumentContainer/InstrumentContainer';
 
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
@@ -8,32 +8,19 @@ import Sequencer from '../../Sequencer/Sequencer';
 import Select from '../../Select/Select';
 
 import { createArr, createMatrix, compareChanges } from '../../../utils';
-import polySynth from './polySynthBuilder';
+import polySynth, { EnumSynth } from './polySynthBuilder';
 
 import styles from './PolySynth.module.scss';
+import { AnySynth } from '../Synth/Synth';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 interface IPolySynth {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   active: boolean,
-  properties: IProperties,
-  instrument: IInstrument,
-  subCategory: string
-}
-
-export interface IProperties {
-  effects: IEffects[],
-  id: string,
-  volume: number,
-  bars: number,
-  subdivisions: number,
-  octave: number,
-  envelope: IEnvelope[],
-  oscillators: IOscillator[],
-  savedChords: string[][],
-  savedPattern: number[][]
+  properties: IInstrument,
+  instrument: EnumSynth,
+  subCategory?: string
 }
 
 export type SynthRefLike = {
@@ -41,7 +28,6 @@ export type SynthRefLike = {
 }
 
 const PolySynth = React.memo(function PolySynth({
-  Tone,
   dispatch,
   active,
   properties,
@@ -49,16 +35,16 @@ const PolySynth = React.memo(function PolySynth({
   subCategory,
 }: IPolySynth) {
   const {
-    effects,
-    id,
-    volume,
     bars,
-    subdivisions,
-    octave,
+    effects,
     envelope,
+    id,
+    octave,
     oscillators,
     savedChords = [],
     savedPattern = [],
+    subdivisions,
+    volume,
   } = properties;
 
   const {
@@ -68,12 +54,12 @@ const PolySynth = React.memo(function PolySynth({
     removeNoteFromChord,
     setNewOctaveToChords,
     options,
-  } = polySynth(Tone);
+  } = polySynth();
 
   const [instrument, setInstrument] = useState(_instrument);
-  // TODO: Help request
-  const [synth, setSynth]: [Tone.PolySynth | null, React.Dispatch<any>] = useState(null);
-  const [chords, setChords] = useState(savedChords);
+
+  const [synth, setSynth] = useState<Tone.PolySynth | null>(null);
+  const [chords, setChords] = useState<string[][]>(savedChords);
   const [pattern, setPattern] = useState(savedPattern);
 
   const totalTiles = bars * subdivisions;
@@ -84,13 +70,15 @@ const PolySynth = React.memo(function PolySynth({
       envelope,
       volume,
       effects,
-      oscillators
+      // oscillators
     );
     setSynth(_synth);
 
     return () => {
       console.log('disposing synth');
-      synth && synth.dispose();
+      if (synth) {
+        synth.dispose();
+      }
     };
     //eslint-disable-next-line
   }, [
@@ -133,12 +121,14 @@ const PolySynth = React.memo(function PolySynth({
   }, [octave]);
 
   useEffect(() => {
-    const sequence = createSynthSequence(synth, chords, bars, subdivisions);
-
-    return () => {
-      console.log('disposing sequence');
-      sequence.dispose();
-    };
+    if (synth) {
+      const sequence = createSynthSequence(synth, chords, bars, subdivisions);
+      
+      return () => {
+        console.log('disposing sequence');
+        sequence.dispose();
+      };
+    }
   }, [Tone, bars, chords, createSynthSequence, subdivisions, synth]);
 
   //rerender pattern if the amount of bars changes
@@ -187,20 +177,18 @@ const PolySynth = React.memo(function PolySynth({
   const handleDeleteInstrument = () =>
     dispatch({ type: 'DELETE_INSTRUMENT', id });
 
-  const handleSelectInstrument = (option) => setInstrument(option);
+  // TODO: Took out as it wasn't being used
+  // const handleSelectInstrument = (option) => setInstrument(option);
 
-  // TODO: Help request
-  const menuOptions: IMenuOptions = [];
+  const menuOptions: IMenuOptions[] = [];
 
   return (
     <>
       <div className={styles.instrument}>
         <InstrumentContainer
-          handleSelectInstrument={handleSelectInstrument}
           handleActiveInstrument={handleActiveInstrument}
           handleDeleteInstrument={handleDeleteInstrument}
           menuOptions={menuOptions}
-          options={options}
           name={`${subCategory} | ${_instrument}`}
           active={active}
         />

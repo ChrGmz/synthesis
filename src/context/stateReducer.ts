@@ -5,6 +5,9 @@ import * as Tone from 'tone';
 
 import synthSubCategoryOptions from '../components/instruments/Synth/synthOptions';
 import { resolveEffect } from '../utils';
+import { AnyEffect } from './GlobalState.context';
+import { EnumSynth } from '../components/instruments/PolySynth/polySynthBuilder';
+import { ISynthOscillator } from '../components/instruments/Synth/synthBuilder';
 
 type Effect = 
   'AutoFilter'
@@ -34,7 +37,7 @@ interface IAction {
   type: string,
   category?: string,
   subCategory?: string,
-  instrument?: string,
+  instrument?: EnumSynth,
   value?: number,
   values?: number,
   effect?: Effect,
@@ -48,12 +51,47 @@ interface IAction {
 interface IInstrument {
   category?: string,
   subCategory?: string,
-  instrument?: string,
+  instrument: EnumSynth,
   id: string;
   defaultSettings?: IDefaultSettings,
   synthOptions?: {[key: string]: object},
   effects: IEffects[],
-  oscillator?: IOscillator
+  oscillators?: ISynthOscillator[],
+  volume: number,
+  bars: number,
+  subdivisions: number,
+  savedPattern: number[][],
+  envelope: IEnvelope[],
+  octave: number,
+  savedChords?: string[][],
+}
+
+export interface IInstrumentBase {
+  id: string,
+  effects: IEffects[],
+  volume: number,
+  bars: number,
+  subdivisions: number,
+}
+
+export interface IInstrumentPolySynth extends IInstrumentBase {
+  savedPattern: number[][],
+  octave: number,
+  envelope: IEnvelope[],
+  oscillators: ISynthOscillator[],
+  savedChords: string[][],
+}
+
+export interface IInstrumentSynth extends IInstrumentBase {
+  savedPattern: number[][],
+  octave: number,
+  envelope: IEnvelope[],
+  oscillator: ISynthOscillator,
+}
+
+export interface IInstrumentSampler extends IInstrumentBase {
+  savedPattern: number[],
+  subCategory: string,
 }
 
 interface IEnvelope {
@@ -63,15 +101,7 @@ interface IEnvelope {
   release?: number,
 }
 
-// TODO: Made optional to fix InstrumentPanel on Dashboard
-interface ActiveInstrument extends IInstrument {
-  volume?: number,
-  bars?: string,
-  octave?: number,
-  envelope?: IEnvelope,
-}
-
-interface IDefaultSettings {
+export interface IDefaultSettings {
   effects: string[],
   volume: number,
   subdivisions: number,
@@ -79,14 +109,9 @@ interface IDefaultSettings {
   octave: number,
 }
 
-interface IOscillator {
-  volume: number,
-  type?: string
-}
-
 interface IEffects {
   name: string,
-  method: Effect
+  method: AnyEffect
 }
 
 export default function stateReducer(state: IState, action: IAction): IState {
@@ -95,36 +120,38 @@ export default function stateReducer(state: IState, action: IAction): IState {
       const id: string = uuidv4();
       const { category, subCategory, instrument } = action;
 
-      const defaultSettings = {
-        effects: [],
-        volume: -25,
-        subdivisions: 16,
-        bars: 1,
-        octave: 2,
-      };
+      if (instrument) {
+        const defaultSettings = {
+          effects: [],
+          volume: -25,
+          subdivisions: 16,
+          bars: 1,
+          octave: 2,
+        };
 
-      const synthOptions =
-        instrument &&
-        (category === 'synth' || category === 'polySynth')
-          ? synthSubCategoryOptions[instrument]
-          : {};
+        const synthOptions =
+          instrument &&
+          (category === 'synth' || category === 'polySynth')
+            ? synthSubCategoryOptions[instrument]
+            : {};
 
-      console.log(synthOptions);
+        console.log(synthOptions);
 
 
-      const newInstrument: IInstrument = {
-        category,
-        subCategory,
-        instrument,
-        id,
-        ...defaultSettings,
-        ...synthOptions,
-      };
+        const newInstrument: IInstrument = {
+          category,
+          subCategory,
+          instrument,
+          id,
+          ...defaultSettings,
+          synthOptions,
+        };
 
-      return {
-        ...state,
-        instruments: [...state.instruments, newInstrument],
-      };
+        return {
+          ...state,
+          instruments: [...state.instruments, newInstrument],
+        };
+      }
     }
 
     case 'UPDATE_ACTIVE_INSTRUMENT': {
@@ -254,7 +281,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
 
     case 'ADD_EFFECT_TO_INSTRUMENT': {
       const { effect } = action;
-      const { instruments, activeInstrumentId, Tone } = state;
+      const { instruments, activeInstrumentId } = state;
 
       const _effect = effect && resolveEffect(effect);
 
@@ -282,12 +309,12 @@ export default function stateReducer(state: IState, action: IAction): IState {
 
       const _instruments = instruments.map((_instrument) => {
         if (_instrument.id !== activeInstrumentId) return _instrument;
-        const { oscillator } = _instrument;
+        const { oscillators } = _instrument;
 
-        if (oscillator) {
+        if (oscillators) {
           return {
             ..._instrument,
-            oscillator: { ...oscillator, ...oscProps },
+            oscillator: { ...oscillators, ...oscProps },
           };
         } else {
           return {
@@ -364,4 +391,4 @@ function fractionStrToDecimal(str: any): number {
   return str.split('/').reduce((p: number, c: number) => p / c);
 }
 
-export { IInstrument, IAction, Effect, ActiveInstrument, IEffects, IEnvelope, IOscillator };
+export { IInstrument, IAction, Effect, IEffects, IEnvelope };

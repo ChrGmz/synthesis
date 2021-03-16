@@ -20,7 +20,6 @@ interface IMasterProperties {
 }
 
 interface IMasterPanel {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   playState: PlayState,
   masterProperties: IMasterProperties,
@@ -28,7 +27,6 @@ interface IMasterPanel {
 }
 
 function MasterPanel({
-  Tone,
   dispatch,
   playState,
   handleTransport,

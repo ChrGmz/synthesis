@@ -7,12 +7,11 @@ import { EnumSynth } from '../../instruments/PolySynth/polySynthBuilder';
 import styles from './SelectionItems.module.scss';
 
 interface ISelectionItems {
-  Tone: typeof Tone,
   volume: number,
   category: string,
   subCategory: string,
   instrument: EnumSynth,
-  handleSelectInstrument: (a: string, b?: string, c?: string) => void,
+  handleSelectInstrument: (category: string, subCategory: string, instrument: EnumSynth) => void,
 }
 
 type PrevSampleRef = {
@@ -20,7 +19,6 @@ type PrevSampleRef = {
 }
 
 function SelectionItems({
-  Tone,
   volume,
   category,
   subCategory,

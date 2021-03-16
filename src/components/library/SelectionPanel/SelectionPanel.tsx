@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import * as Tone from 'tone';
 
 import { synths, polySynths } from '../../instruments';
@@ -12,21 +12,19 @@ import { IAction } from '../../../context/stateReducer';
 import { EnumSynth } from '../../instruments/PolySynth/polySynthBuilder';
 
 interface ISelectionPanel {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   categoryErrorFlag?: boolean,
-  activeInstrumentId: string | boolean | null  
+  activeInstrumentId: string | null  
 }
 
 const SelectionPanel = React.memo(function SelectionPanel({
-  Tone,
   dispatch,
   categoryErrorFlag,
   activeInstrumentId,
 }: ISelectionPanel) {
   const [instruments, setInstruments] = useState([...synths, ...polySynths]);
   const [subCategories, setSubCategories] = useState(['synth', 'polySynth']);
-  const [activeSubCategory, setActiveSubCategory] = useState(null);
+  const [activeSubCategory, setActiveSubCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
 
   //handle the volume to test the samples
@@ -36,7 +34,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
     getSampleNames().then((res) => {
       console.log(res);
       // TODO: need to ask for api
-      const _samples = Object.values(res).flat(1);
+      const _samples = Object.values(res).flat();
       const _subCategories = Object.keys(res);
 
       setInstruments([...instruments, ..._samples]);
@@ -47,7 +45,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
   }, []);
 
   // TODO: how do useStates?
-  function handleSubCategory(subCategory) {
+  function handleSubCategory(subCategory: string) {
     setActiveSubCategory(
       activeSubCategory !== subCategory ? subCategory : null
     );
@@ -103,7 +101,6 @@ const SelectionPanel = React.memo(function SelectionPanel({
         // if (instrument.length < 1 || instrument == null) return null;
         return (
           <SelectionItems
-            Tone={Tone}
             category={category}
             subCategory={subCategory}
             instrument={instrument}
@@ -115,7 +112,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
       });
   }
 
-  const handleSearch = useDebounce(function (event) {
+  const handleSearch = useDebounce(function (event: ChangeEvent<HTMLSelectElement>) {
     event.preventDefault();
     
     const { value } = event.target;
@@ -125,7 +122,7 @@ const SelectionPanel = React.memo(function SelectionPanel({
 
   const debouncedHandleChangeFn = useDebounce(setVolume, 250);
 
-  function handleVolume(event) {
+  function handleVolume(event: ChangeEvent<HTMLInputElement>) {
     const volume = event.target.value;
     debouncedHandleChangeFn(volume);
   }
@@ -167,7 +164,7 @@ compareActiveInstrument);
 export default SelectionPanel;
 
 // TODO: Referenced at end of react component
-function compareActiveInstrument(prevProps, newProps) {
+function compareActiveInstrument(prevProps: ISelectionPanel, newProps: ISelectionPanel) {
   return (
     prevProps.activeInstrumentId === newProps.activeInstrumentId &&
     prevProps.categoryErrorFlag === newProps.categoryErrorFlag

@@ -4,7 +4,7 @@ import * as Tone from 'tone';
 import panelModules from '../panels/index.PanelModule';
 import PanelModuleContainer from '../panels/PanelModuleContainer/PanelModuleContainer';
 import { createArr } from '../../utils';
-import { IAction, IInstrument, ActiveInstrument } from '../../context/stateReducer';
+import { IAction, IInstrument } from '../../context/stateReducer';
 
 import { ArrowL, ArrowR } from '../../resources/icons';
 
@@ -12,10 +12,9 @@ import styles from './InstrumentPanel.module.scss';
 import { IEffectsList } from '../../context/GlobalState.context';
 
 interface IInstrumentPanel {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
-  activeInstrument: ActiveInstrument | null,
-  effectsList: IEffectsList | string[]
+  activeInstrument: IInstrument | null,
+  effectsList: IEffectsList
 }
 
 type Panel = 

@@ -11,8 +11,9 @@ interface IVisualizer {
   playing: boolean
 }
 
+// TODO: How to setup this useRef
 export type LineRef = {
-  current: SVGPathElement[] | null
+  current: 
 }
 
 function Visualizer({ Tone, playing }: IVisualizer) {

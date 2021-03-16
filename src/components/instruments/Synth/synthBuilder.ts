@@ -1,14 +1,18 @@
-import { IEffects, IEnvelope, IOscillator } from '../../../context/stateReducer';
+import { IEffects, IEnvelope } from '../../../context/stateReducer';
 import { createArr } from '../../../utils';
 import { EnumSynth } from '../PolySynth/polySynthBuilder';
+import * as Tone from 'tone';
+import synthSubCategoryOptions from './synthOptions';
+import { IEffectsList, AnyEffect } from '../../../context/GlobalState.context';
+import { AnySynth } from './Synth';
 
-interface ISynthOscillator {
+
+export interface ISynthOscillator {
   oscVol: number,
   oscType: string
 }
 
-// TODO: no me gusta typeof Tone
-export default function synthBuilder(Tone) {
+export default function synthBuilder() {
   return {
     createSynth,
     createSynthSequence,
@@ -28,12 +32,7 @@ export default function synthBuilder(Tone) {
     const [attack, decay, sustain, release] = envelope;
     const { oscVol, oscType } = oscillator;
 
-    const _synth = new Tone[instrument]({
-      volume: volume,
-      portamento: 0.1,
-      oscillator: oscType ? { volume: oscVol, type: oscType } : null,
-      envelope: { attack, decay, sustain, release },
-    });
+    const _synth = new Tone[instrument](synthSubCategoryOptions[instrument]);
 
     let _effects = mapEffects(effects);
 
@@ -51,7 +50,7 @@ export default function synthBuilder(Tone) {
   }
 
 
-  function createSynthSequence(synth: typeof Tone.Synth, progression: (string | number)[], bars: number, subdivisions: number) {
+  function createSynthSequence(synth: AnySynth, progression: string[], bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(
@@ -72,7 +71,7 @@ export default function synthBuilder(Tone) {
     return sequence;
   }
 
-  function createArpeggiatorSequence(synth: typeof Tone.Synth, progression: (string | number)[]) {
+  function createArpeggiatorSequence(synth: AnySynth, progression: string[]) {
     const sequence = new Tone.Pattern(
       (time: number, note: string) => {
         synth.triggerAttackRelease(note, '8n', time);
@@ -82,7 +81,6 @@ export default function synthBuilder(Tone) {
     );
 
     sequence.playbackRate = 2;
-    sequence.loop = true;
     sequence.start(0);
 
     return sequence;
@@ -100,9 +98,9 @@ export default function synthBuilder(Tone) {
   //   return sequence;
   // }
 
-  function setNewOctaveToProgression(progression: (string | number)[], octave: number) {
+  function setNewOctaveToProgression(progression: string[], octave: number) {
     return progression.map(
-      (note) => typeof note === 'string' && note.replace(/[0-9]/g, String(octave))
+      (note) => note.replace(/[0-9]/g, String(octave))
     );
   }
 

@@ -1,7 +1,9 @@
-import { IEffects, IEnvelope, IInstrument, IOscillator } from '../../../context/stateReducer';
+import { IEffects, IEnvelope, IInstrument } from '../../../context/stateReducer';
 import { createArr } from '../../../utils';
 import * as Tone from 'tone';
-import { ISynth } from '../Synth/Synth';
+import { AnySynth, ISynth } from '../Synth/Synth';
+import synthSubCategoryOptions from '../Synth/synthOptions';
+import { ISynthOscillator } from '../Synth/synthBuilder';
 
 export enum EnumSynth {
   Synth = 'Synth',
@@ -13,8 +15,7 @@ export enum EnumSynth {
   MonoSynth = 'MonoSynth'
 }
 
-// TODO: Tone not taking typeof Tone
-export default function synthBuilder(Tone) {
+export default function synthBuilder() {
   const synths = ['Synth', 'AMSynth', 'DuoSynth', 'MembraneSynth'];
 
   return {
@@ -32,15 +33,10 @@ export default function synthBuilder(Tone) {
     envelope: IEnvelope[],
     volume: number,
     effects: IEffects[],
-    oscillators: IOscillator
+    oscillators?: ISynthOscillator
   ) {
     const [attack, decay, sustain, release] = envelope;
-    const _synth = new Tone.PolySynth(Tone[instrument], {
-      volume: volume,
-      portamento: 0.005,
-      oscillator: { volume: 12, type: 'sine' },
-      envelope: { attack, decay, sustain, release },
-    });
+    const _synth = new Tone.PolySynth(synthSubCategoryOptions[instrument]);
 
     const _effects = mapEffects(effects);
 
@@ -53,7 +49,7 @@ export default function synthBuilder(Tone) {
     return _synth;
   }
 
-  function createSynthSequence(synth: typeof Tone.Synth, chords: string[][], bars: number, subdivisions: number) {
+  function createSynthSequence(synth: Tone.PolySynth, chords: string[][], bars: number, subdivisions: number) {
     const totalTiles = bars * subdivisions;
 
     const sequence = new Tone.Sequence(

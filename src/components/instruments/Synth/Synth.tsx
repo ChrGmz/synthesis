@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import * as Tone from 'tone';
-import { IAction, IInstrument, IOscillator } from '../../../context/stateReducer';
-import { IProperties } from '../PolySynth/PolySynth';
+import { IAction, IEnvelope, IInstrument, IInstrumentSynth } from '../../../context/stateReducer';
 
 import Sequencer from '../../Sequencer/Sequencer';
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
@@ -12,27 +11,23 @@ import {
   compareChanges,
   randomChordProgression,
 } from '../../../utils';
-import synthBuilder from './synthBuilder';
+import synthBuilder, { ISynthOscillator } from './synthBuilder';
 import styles from './Synth.module.scss';
 import { EnumSynth } from '../PolySynth/polySynthBuilder';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 export interface ISynth {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   active: boolean,
-  properties: IPropertiesSynth,
+  properties: IInstrument,
   instrument: EnumSynth,
-  subCategory: string
+  subCategory?: string
 }
 
-interface IPropertiesSynth extends IProperties {
-  oscillator: IOscillator,
-}
+export type AnySynth = Tone.Synth | Tone.AMSynth | Tone.FMSynth | Tone.DuoSynth | Tone.MembraneSynth | Tone.MetalSynth | Tone.MonoSynth | Tone.DuoSynth;
 
 const Synth = React.memo(function Synth({
-  Tone,
   dispatch,
   active,
   properties,
@@ -40,34 +35,34 @@ const Synth = React.memo(function Synth({
   subCategory,
 }: ISynth) {
   const {
+    bars,
     effects,
+    envelope,
     id,
     octave,
-    volume,
-    bars,
+    oscillators,
     subdivisions,
-    envelope,
-    oscillator,
     savedPattern = [],
+    volume,
   } = properties;
+
+  const [oscillator] = oscillators || [];
 
   const {
     createSynth,
     createSynthSequence,
     createArpeggiatorSequence,
     setNewOctaveToProgression,
-    // TODO: didn't see where this is used
     // options,
-  } = synthBuilder(Tone);
+  } = synthBuilder();
 
-  // TODO: Help request
-  const [synth, setSynth] = useState(null);
+  const [synth, setSynth] = useState<AnySynth | null>(null);
   const [instrument, setInstrument] = useState(_instrument);
   const [arpeggiator, setArpeggiator] = useState(false);
   const [mute, setMute] = useState(false);
 
   const [pattern, setPattern] = useState(savedPattern);
-  const [progression, setProgression] = useState([]);
+  const [progression, setProgression] = useState<string[]>([]);
 
   const totalTiles = bars * subdivisions;
 
@@ -103,12 +98,12 @@ const Synth = React.memo(function Synth({
   const toggleActive = (col: number, row: number, note: string) => {
     const _progression = [...progression];
 
-    _progression[col] = progression[col] !== note ? note : 0;
+    _progression[col] = progression[col] !== note ? note : '';
 
     const _pattern = pattern.map((patternRow, currRow) => {
       return patternRow.map((el, idx) => {
         if (idx !== col) return el;
-        else if (row === currRow && el === 0) return note;
+        else if (row === currRow && el === 0) return 1;
         else return 0;
       });
     });
@@ -131,14 +126,16 @@ const Synth = React.memo(function Synth({
   }, [octave]);
 
   useEffect(() => {
-    const sequence = arpeggiator
+    if (synth) {
+      const sequence = arpeggiator
       ? createArpeggiatorSequence(synth, progression)
       : createSynthSequence(synth, progression, bars, subdivisions);
-
-    return () => {
-      console.log('disposing sequence');
-      sequence.dispose();
-    };
+      
+      return () => {
+        console.log('disposing sequence');
+        sequence.dispose();
+      };
+    }
   }, [
     arpeggiator,
     bars,
@@ -204,10 +201,8 @@ const Synth = React.memo(function Synth({
             menuOptions={menuOptions}
             handleMute={handleMute}
             mute={mute}
-            handleSelectInstrument={handleSelectInstrument}
             handleActiveInstrument={handleActiveInstrument}
             handleDeleteInstrument={handleDeleteInstrument}
-            // TODO: did not find where options is used
             // options={options}
             name={`${subCategory} | ${_instrument}`}
             active={active}
@@ -230,7 +225,7 @@ compareChanges);
 
 export default Synth;
 
-function getIndexOfNotes(progression: (string)[]) {
+function getIndexOfNotes(progression: string[]) {
   return progression.map((note, i) => {
     return notes.indexOf(note.replace(/[0-9]/g, ''));
   });

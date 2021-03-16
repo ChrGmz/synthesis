@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import { IInstrument } from '../../context/stateReducer';
+import { AnySynth } from '../instruments/Synth/Synth';
 import Tile from '../Tile/Tile';
+import * as Tone from 'tone';
 
 import styles from './Sequencer.module.scss';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 interface ISequencer {
-  instrument: ,
-  pattern: ,
-  toggleActive: ,
-  note: ,
-  keyboard: ,
-  octave: ,
+  instrument: AnySynth | Tone.PolySynth | Tone.Sampler | null,
+  pattern: number[][] | number[],
+  toggleActive: (a: number, b: number, c: string) => void,
+  note?: string,
+  keyboard?: boolean,
+  octave?: number,
 }
 
 const Sequencer = React.memo(function Sequencer({
@@ -30,8 +33,8 @@ const Sequencer = React.memo(function Sequencer({
 
   function renderKeyboard() {
     const length = notes.length;
-    return pattern.map((_pattern, row) => {
-      const note = notes[row % length] + String(octave);
+    return (pattern as number[][]).map((_pattern, row) => {
+      const note = (notes[row % length] + String(octave));
       return renderSequence(_pattern, note, row);
     });
   }
@@ -41,11 +44,11 @@ const Sequencer = React.memo(function Sequencer({
       <div className={styles.sequence} key={`R-${row}-N${note}`}>
         <div
           className={styles.noteTile}
-          onMouseDown={() => instrument.triggerAttackRelease(_note, '4n')}
+          onMouseDown={() => instrument?.triggerAttackRelease(Tone.Frequency(_note).toFrequency(), '4n')}
         >
-          <h3>{_note.replace(/[0-9]/g, '')}</h3>
+          <h3>{_note?.replace(/[0-9]/g, '')}</h3>
         </div>
-        {_pattern.map((active: number, col: number) => {
+        {(_pattern as number[]).map((active, col) => {
           return (
             <Tile
               instrument={instrument}
@@ -72,7 +75,7 @@ const Sequencer = React.memo(function Sequencer({
 },
 compareChangeInPattern);
 
-function compareChangeInPattern(prevProps, newProps) {
+function compareChangeInPattern(prevProps: ISequencer, newProps: ISequencer) {
   return (
     prevProps.pattern === newProps.pattern &&
     prevProps.instrument === newProps.instrument
