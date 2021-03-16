@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import * as Tone from 'tone';
-import { IAction, IEffects, IEnvelope, IInstrument, IInstrumentPolySynth } from '../../../context/stateReducer';
+import { IAction, IInstrument } from '../../../context/stateReducer';
 import { IMenuOptions } from '../InstrumentContainer/InstrumentContainer';
 
 import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
@@ -11,7 +11,6 @@ import { createArr, createMatrix, compareChanges } from '../../../utils';
 import polySynth, { EnumSynth } from './polySynthBuilder';
 
 import styles from './PolySynth.module.scss';
-import { AnySynth } from '../Synth/Synth';
 
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 

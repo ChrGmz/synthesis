@@ -7,16 +7,15 @@ import { createArr } from '../../../utils';
 import styles from './Visualizer.module.scss';
 
 interface IVisualizer {
-  Tone: typeof Tone,
-  playing: boolean
+  playing: boolean,
 }
 
-// TODO: How to setup this useRef
+// TODO: HELP REQUEST: How to setup this useRef
 export type LineRef = {
   current: 
 }
 
-function Visualizer({ Tone, playing }: IVisualizer) {
+function Visualizer({ playing }: IVisualizer) {
   const lineRef = useRef([]);
 
   useEffect(() => {

@@ -66,34 +66,6 @@ interface IInstrument {
   savedChords?: string[][],
 }
 
-export interface IInstrumentBase {
-  id: string,
-  effects: IEffects[],
-  volume: number,
-  bars: number,
-  subdivisions: number,
-}
-
-export interface IInstrumentPolySynth extends IInstrumentBase {
-  savedPattern: number[][],
-  octave: number,
-  envelope: IEnvelope[],
-  oscillators: ISynthOscillator[],
-  savedChords: string[][],
-}
-
-export interface IInstrumentSynth extends IInstrumentBase {
-  savedPattern: number[][],
-  octave: number,
-  envelope: IEnvelope[],
-  oscillator: ISynthOscillator,
-}
-
-export interface IInstrumentSampler extends IInstrumentBase {
-  savedPattern: number[],
-  subCategory: string,
-}
-
 interface IEnvelope {
   attack?: number,
   decay?: number,
@@ -138,13 +110,13 @@ export default function stateReducer(state: IState, action: IAction): IState {
         console.log(synthOptions);
 
 
-        const newInstrument: IInstrument = {
+        const newInstrument = {
           category,
           subCategory,
           instrument,
           id,
           ...defaultSettings,
-          synthOptions,
+          ...synthOptions,
         };
 
         return {
@@ -187,7 +159,7 @@ export default function stateReducer(state: IState, action: IAction): IState {
       return {
         ...state,
         instruments: filteredInstruments,
-        activeInstrumentId: state.activeInstrumentId === id && null,
+        activeInstrumentId: state.activeInstrumentId === id ? null : state.activeInstrumentId,
       };
     }
 

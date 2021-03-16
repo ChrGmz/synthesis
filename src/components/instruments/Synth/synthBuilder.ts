@@ -3,7 +3,6 @@ import { createArr } from '../../../utils';
 import { EnumSynth } from '../PolySynth/polySynthBuilder';
 import * as Tone from 'tone';
 import synthSubCategoryOptions from './synthOptions';
-import { IEffectsList, AnyEffect } from '../../../context/GlobalState.context';
 import { AnySynth } from './Synth';
 
 
