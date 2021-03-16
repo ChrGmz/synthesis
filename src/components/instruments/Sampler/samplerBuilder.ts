@@ -2,8 +2,7 @@ import { createArr } from '../../../utils';
 import * as Tone from 'tone';
 import { IEffects } from '../../../context/stateReducer';
 
-// TODO: tone again
-export default function samplerBuilder(Tone) {
+export default function samplerBuilder() {
   return {
     createSample,
     createSequence,
@@ -40,13 +39,14 @@ export default function samplerBuilder(Tone) {
     });
   }
 
-  function createSequence(sample: typeof Tone.Sampler, pattern: (string | number)[], bars: number, subdivisions: number, humanize: boolean | string) {
+  function createSequence(sample: Tone.Sampler, pattern: number[], bars: number, subdivisions: number, humanize: boolean | string) {
     const totalTiles = bars * subdivisions;
     const note = 'F1';
 
     const sequence = new Tone.Sequence(
       (time: number, col: number) => {
-        if (pattern[col] !== 0) sample.triggerAttackRelease(note, '1n', time);
+        // Removed: if (pattern[col] !== 0) 
+        sample.triggerAttackRelease(note, '1n', time);
       },
       createArr(totalTiles, null, (_, idx) => idx),
       `${subdivisions}n`

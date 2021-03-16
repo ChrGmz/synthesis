@@ -7,50 +7,49 @@ import React, {
 } from 'react';
 
 import Sequencer from '../../Sequencer/Sequencer';
-import InstrumentContainer from '../InstrumentContainer/InstrumentContainer';
+import InstrumentContainer, { IMenuOptions } from '../InstrumentContainer/InstrumentContainer';
 import * as Tone from 'tone';
-import { IAction } from '../../../context/stateReducer';
-import { IProperties } from '../PolySynth/PolySynth';
+import { IAction, IInstrument } from '../../../context/stateReducer';
 
 import { createArr, compareChanges } from '../../../utils';
 import samplerBuilder from './samplerBuilder';
 import styles from './Sampler.module.scss';
+import { AnySynth } from '../Synth/Synth';
+import { EnumSynth } from '../PolySynth/polySynthBuilder';
 
 interface ISampler {
-  Tone: typeof Tone,
   dispatch: React.Dispatch<IAction>,
   active: boolean,
-  properties: IPropertiesSampler,
+  properties: Omit<IInstrument, 'envelope' | 'oscillators' | 'octave'>,
+  instrument: EnumSynth
 }
 
-interface IPropertiesSampler extends IProperties {
-  subCategory: string,
-  instrument: string
-}
+// interface IPropertiesSampler extends IProperties {
+//   savedPattern: number[],
+//   subCategory: string,
+//   instrument: string,
+// }
 
 const Sampler = React.memo(function Sampler({
-  Tone,
   dispatch,
   active,
+  instrument,
   properties,
 }: ISampler) {
   const {
-    id,
-    effects,
-    subCategory,
-    instrument,
-    volume,
     bars,
-    subdivisions,
+    effects,
+    id,
     savedPattern = [],
+    subCategory,
+    subdivisions,
+    volume,
   } = properties;
 
-  const { createSample, createSequence, activeTilesByStep } = samplerBuilder(
-    Tone
-  );
+  const { createSample, createSequence, activeTilesByStep } = samplerBuilder();
 
-  const [sample, setSample] = useState(null);
-  const [pattern, setPattern] = useState(savedPattern);
+  const [sample, setSample] = useState<Tone.Sampler | null>(null);
+  const [pattern, setPattern] = useState(savedPattern[0] || []);
 
   const [humanize, setHumanize] = useState(false);
   const [mute, setMute] = useState(false);
@@ -58,37 +57,43 @@ const Sampler = React.memo(function Sampler({
   const totalTiles = bars * subdivisions;
   const note = 'C1';
 
+  
   // get and update the sample with the correct instrument
   useEffect(() => {
-    const _sample = createSample(
-      instrument,
-      subCategory,
-      volume,
-      effects,
-      mute
-    );
+    if (subCategory) {
+      const _sample = createSample(
+        instrument,
+        subCategory,
+        volume,
+        effects,
+        mute
+      );
 
-    setSample(_sample);
-    return () => {
-      console.log('disposing sample');
-      sample?.dispose();
-    };
+      setSample(_sample);
+
+      return () => {
+        console.log('disposing sample');
+        sample?.dispose();
+      };
+    }
     //eslint-disable-next-line
   }, [effects, instrument, volume, mute]);
 
   useEffect(() => {
-    const sequence = createSequence(
-      sample,
-      pattern,
-      bars,
-      subdivisions,
-      humanize
-    );
-
-    return () => {
-      console.log(`disposing ${instrument} sequence`);
-      sequence.dispose();
-    };
+    if (sample) {
+      const sequence = createSequence(
+        sample,
+        pattern,
+        bars,
+        subdivisions,
+        humanize
+        );
+      
+      return () => {
+        console.log(`disposing ${instrument} sequence`);
+        sequence.dispose();
+      };
+    }
   }, [
     bars,
     createSequence,
@@ -113,8 +118,8 @@ const Sampler = React.memo(function Sampler({
     [pattern]
   );
 
-  function setActiveTilesByStep(step: number) {
-    setPattern(activeTilesByStep(totalTiles, step));
+  function setActiveTilesByStep(step?: number) {
+    if (step) setPattern(activeTilesByStep(totalTiles, step));
   }
 
   function handleActiveInstrument() {
@@ -143,7 +148,7 @@ const Sampler = React.memo(function Sampler({
 
   const handleMute = () => setMute(!mute);
 
-  const menuOptions = [
+  const menuOptions: IMenuOptions[] = [
     { name: 'Shift Pattern Left', method: shiftPatternLeft },
     { name: 'Shift Pattern Right', method: shiftPatternRight },
     {
@@ -189,7 +194,6 @@ const Sampler = React.memo(function Sampler({
           mute={mute}
           handleDeleteInstrument={handleDeleteInstrument}
           handleActiveInstrument={handleActiveInstrument}
-          setActiveTilesByStep={setActiveTilesByStep}
           name={instrument}
           active={active}
           menuOptions={menuOptions}
@@ -208,7 +212,7 @@ compareChanges);
 
 export default Sampler;
 
-function _shiftPatternRight(pattern: string[][]) {
+function _shiftPatternRight(pattern: number[]) {
   const _pattern = [...pattern];
 
   const lastEl = _pattern.pop();
@@ -220,7 +224,7 @@ function _shiftPatternRight(pattern: string[][]) {
   return _pattern;
 }
 
-function _shiftPatternLeft(pattern: string[][]) {
+function _shiftPatternLeft(pattern: number[]) {
   const _pattern = [...pattern];
 
   const firstEl = _pattern.shift();

@@ -9,17 +9,20 @@ interface IStateContext {
   dispatch: React.Dispatch<IAction>
 }
 
-interface IEffectsList {
-  distortion: Tone.Distortion,
-  phaser: Tone.Phaser,
-  compressor: Tone.Compressor,
-  hipass: Tone.Filter,
-  tremolo: Tone.Tremolo,
-  pitchShift: Tone.PitchShift,
-  reverb: Tone.Reverb,
-  delay: Tone.PingPongDelay,
-  freeverb: Tone.Freeverb,
-  feedback: Tone.FeedbackDelay
+export type AnyEffect = Tone.Distortion | Tone.Phaser | Tone.Compressor | Tone.Filter | Tone.Tremolo | Tone.PitchShift | Tone.Reverb | Tone.Delay | Tone.Freeverb | Tone.FeedbackDelay | Tone.Volume;
+
+export interface IEffectsList {
+  distortion?: Tone.Distortion,
+  phaser?: Tone.Phaser,
+  compressor?: Tone.Compressor,
+  hipass?: Tone.Filter,
+  tremolo?: Tone.Tremolo,
+  pitchShift?: Tone.PitchShift,
+  reverb?: Tone.Reverb,
+  delay?: Tone.PingPongDelay,
+  freeverb?: Tone.Freeverb,
+  feedback?: Tone.FeedbackDelay,
+  volume?: Tone.Volume
 }
 
 const StateContext = createContext<IStateContext | null>(null);
@@ -27,7 +30,6 @@ StateContext.displayName = 'StateContext';
 
 function StateProvider({ children }: {[key: string] : [value: any]}) {
   const [state, dispatch] = useReducer(stateReducer, {
-    Tone: Tone,
     master: {
       effects: [],
       volume: -10,
@@ -75,4 +77,4 @@ function useGlobalState() {
   return context;
 }
 
-export { StateProvider, useGlobalState, IEffectsList };
+export { StateProvider, useGlobalState };

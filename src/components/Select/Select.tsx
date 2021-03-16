@@ -1,38 +1,39 @@
-import React, { useRef } from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 import styles from './Select.module.scss';
 
 interface ISelect {
-  options: ,
-  onChangeFn: ,
-  defaultOption: ,
-  initialOption: ,
-  maxWidth: string,
+  options: string[] | number[],
+  onChangeFn: ((a: string) => void) | ((a: number) => void),
+  // defaultOption?: string[],
+  initialOption?: string | number,
+  maxWidth?: string,
 }
 
+// Removed ref as defaultOption was not being set
 function Select({
   options,
   onChangeFn,
-  defaultOption,
+  // defaultOption,
   initialOption,
   maxWidth = '80px',
 }: ISelect) {
-  const selectRef = useRef(null);
+  // const selectRef = useRef(null);
 
   function renderOptions() {
-    const _options = defaultOption ? [defaultOption, ...options] : options;
+    // const _options = defaultOption ? [defaultOption, ...options] : options;
 
-    return _options.map((option, idx) => (
+    return options.map((option: string | number, idx: number) => (
       <option value={option} key={idx}>
         {option}
       </option>
     ));
   }
 
-  function handleChange(event) {
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     event.preventDefault();
 
     onChangeFn(event.target.value);
-    if (defaultOption) selectRef.current.value = defaultOption;
+    // if (defaultOption) selectRef.current.value = defaultOption;
   }
 
   return (
@@ -41,7 +42,7 @@ function Select({
         className={styles.select}
         onChange={handleChange}
         value={initialOption}
-        ref={selectRef}
+        // ref={selectRef}
         style={{ maxWidth }}
       >
         {renderOptions()}

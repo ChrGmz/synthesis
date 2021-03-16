@@ -7,7 +7,7 @@ interface ITile {
   active: ,
   row: ,
   col: ,
-  toggleActive: ,
+  toggleActive: (a: number, b: number, c: string) => void,
   handlePainting: ,
   isPainting: ,
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 
 import { useDebounce } from '../../../utils';
 
@@ -31,11 +31,11 @@ function Slider({
   }, [defaultVal]);
 
   const debouncedHandleChangeFn = useDebounce(handleChangeFn, 250);
-  function handleChange(event) {
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
 
     const volume = event.target.value;
-    setValue(volume);
+    setValue(+volume);
     debouncedHandleChangeFn(volume);
   }
 

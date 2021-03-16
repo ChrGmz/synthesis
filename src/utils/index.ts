@@ -11,11 +11,11 @@ export type TimeoutRef = {
 function randomChordProgression(root: string = 'C', octave: number = 4, scale: string) {
   const scaleName: string = `${root} ${scale}`;
 
-  const scaleNotes: string = Scale.get(scaleName).notes;
+  const scaleNotes: string[] = Scale.get(scaleName).notes;
 
-  const chordGen: string = scaleNotes.concat(scaleNotes);
+  const chordGen: string[] = scaleNotes.concat(scaleNotes);
 
-  const newChord: (string | number)[] = [];
+  const newChord: string[] = [];
 
   for (let i = 0; i < scaleNotes.length; i++) {
     const noteIdx: number = randomNumberGenerator(scaleNotes.length - 1);
@@ -89,8 +89,8 @@ function useDebounce(fn: Function, timeout: number = 1000) {
   };
 }
 
-function createArr(n: number, fill: number | null = 0, cb = (el: any, index: number) => el): any[]  {
-  const arr: number[] = Array(n).fill(fill).map(cb);
+function createArr(n: number, fill: any = 0, cb = (el: any, index: number) => el): any[]  {
+  const arr: any[] = Array(n).fill(fill).map(cb);
   return arr;
 }
 
